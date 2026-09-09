@@ -6,16 +6,17 @@ export default function Home() {
     <div className="page">
       <section className="hero">
         <div>
-          <p className="eyebrow">EARLY-STAGE GROWTH</p>
+          <p className="eyebrow">EARLY-STAGE FOUNDERS</p>
           <h1>
-            Why isn’t your company growing the way <em>you expected?</em>
+            Find what’s holding your business back. <em>Fix the right problem.</em>
           </h1>
         </div>
         <div className="hero-aside">
           <p>
-            I’m Omoseebi Vincent. I study what keeps early-stage companies from
-            moving forward — then document what I learn through research,
-            experiments, and building.
+            I work with early-stage founders to understand what is preventing their business from growing and determine what to work on next.
+          </p>
+          <p>
+            My work spans product discovery, customer and market research, validation, positioning, messaging, marketing, sales, and growth — depending on where the real constraint is.
           </p>
           <Link className="arrow-link" href="/about">
             About my work ↗
@@ -25,10 +26,20 @@ export default function Home() {
 
       <section className="section">
         <div className="section-head">
-          <h2>Latest writing</h2>
-          <Link className="quiet-link" href="/blog">
-            View all ↗
-          </Link>
+          <h2>What I work on</h2>
+        </div>
+        <div className="method-copy">
+          <div className="method-step"><span className="label">01 / PRODUCT & CUSTOMER</span><strong>Understand the problem.</strong><p>Product discovery, customer research, market research, and validation.</p></div>
+          <div className="method-step"><span className="label">02 / POSITIONING & MESSAGE</span><strong>Make the value clear.</strong><p>Positioning, messaging, copywriting, and offers that connect the product to the right customer.</p></div>
+          <div className="method-step"><span className="label">03 / MARKETING & SALES</span><strong>Find what creates demand.</strong><p>Marketing, distribution, founder-led sales, and experiments that test how customers are reached and converted.</p></div>
+          <div className="method-step"><span className="label">04 / GROWTH</span><strong>Find the constraint.</strong><p>When growth stalls, I look at the whole system before deciding which part needs to change.</p></div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="section-head">
+          <div><p className="eyebrow">THE BLOG</p><h2>Ideas, research, and analysis.</h2></div>
+          <Link className="quiet-link" href="/blog">View all ↗</Link>
         </div>
         <div className="post-grid">
           {posts.map((post) => (
@@ -36,53 +47,16 @@ export default function Home() {
               <span className="tag">{post.type}</span>
               <h3>{post.title}</h3>
               <p>{post.excerpt}</p>
-              <span className="meta">
-                {post.date} · {post.topic}
-              </span>
+              <span className="meta">{post.date} · {post.topic}</span>
             </Link>
           ))}
         </div>
       </section>
 
-      <section className="section method">
-        <div>
-          <p className="eyebrow">HOW I APPROACH THE WORK</p>
-          <h2>
-            Understand first.<br />
-            Validate second.<br />
-            <em>Build third.</em>
-          </h2>
-        </div>
-        <div className="method-copy">
-          <div className="method-step">
-            <span className="label">01 / Observe</span>
-            <strong>Start with what is actually happening.</strong>
-            <p>Look for behaviour, friction, patterns, and evidence before jumping to solutions.</p>
-          </div>
-          <div className="method-step">
-            <span className="label">02 / Understand</span>
-            <strong>Figure out what may be causing it.</strong>
-            <p>Turn assumptions into questions and identify the constraint worth investigating.</p>
-          </div>
-          <div className="method-step">
-            <span className="label">03 / Test</span>
-            <strong>Run the smallest useful experiment.</strong>
-            <p>Learn cheaply before committing more time, money, or code.</p>
-          </div>
-          <div className="method-step">
-            <span className="label">04 / Learn</span>
-            <strong>Let the evidence change the plan.</strong>
-            <p>Keep what works, discard what does not, and decide what to do next.</p>
-          </div>
-        </div>
-      </section>
-
       <section className="section">
         <div className="section-head">
-          <h2>Resources</h2>
-          <Link className="quiet-link" href="/resources">
-            View all ↗
-          </Link>
+          <div><p className="eyebrow">RESOURCES</p><h2>Practical tools for doing the work.</h2></div>
+          <Link className="quiet-link" href="/resources">View all ↗</Link>
         </div>
         <div className="resource-strip">
           {resources.map((resource) => (
@@ -99,7 +73,7 @@ export default function Home() {
         <div className="newsletter">
           <div>
             <p className="eyebrow">EMAIL NOTES</p>
-            <h2>What I’m learning about products, customers, and early-stage growth.</h2>
+            <h2>Practical thinking on products, customers, and early-stage growth.</h2>
           </div>
           <form className="newsletter-form">
             <input aria-label="Email address" type="email" placeholder="your@email.com" />
