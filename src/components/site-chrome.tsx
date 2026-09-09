@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export function SiteHeader() {
-  return <header className="site-header"><Link className="wordmark" href="/">OV<span>.</span></Link><nav aria-label="Main navigation"><Link href="/blog">Blog</Link><Link href="/resources">Resources</Link><Link href="/about">About</Link></nav><Link className="header-note" href="/about">Field notes <span>↗</span></Link></header>;
+  return <header className="site-header"><Link className="wordmark" href="/">OV<span>.</span></Link><nav aria-label="Main navigation"><Link href="/blog">Writing</Link><Link href="/resources">Resources</Link><Link href="/about">About</Link></nav><Link className="header-note" href="/blog">Thinking in public <span>↗</span></Link></header>;
 }
 
 export function SiteFooter() {
