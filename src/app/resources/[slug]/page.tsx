@@ -19,7 +19,7 @@ export default async function ResourcePage({ params }: { params: Promise<{ slug:
 
   return (
     <div className="page">
-      <article className="article">
+      <article className="article resource-detail">
         <p className="eyebrow">{resource.type} / {resource.topic}</p>
         <h1>{resource.title}</h1>
         <p className="lead">{resource.description}</p>
@@ -29,15 +29,16 @@ export default async function ResourcePage({ params }: { params: Promise<{ slug:
           <p>Use the resource to structure your thinking, capture what you know, and make the next decision clearer before committing more time or resources.</p>
 
           {/* RESOURCE FILE
-              When the PDF or slide deck is ready, add it to /public/resources/
-              and replace the href below with the filename.
-              Example: href="/resources/your-file.pdf"
+              Add the finished PDF or slide deck here:
+              /public/resources/{resource.slug}.pdf
+
+              The public URL is:
+              /resources/{resource.slug}.pdf
           */}
-          <p>
-            <a className="arrow-link" href={`/resources/files/${resource.slug}.pdf`} target="_blank" rel="noreferrer">
-              Open the {resource.type.toLowerCase()} ↗
-            </a>
-          </p>
+          <div className="resource-file-note">
+            <span className="meta">RESOURCE FILE</span>
+            <p>PDF / slide deck will be added here.</p>
+          </div>
         </div>
       </article>
     </div>
