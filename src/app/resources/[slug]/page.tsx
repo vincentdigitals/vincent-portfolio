@@ -1,0 +1,6 @@
+import { notFound } from "next/navigation";
+import { getResource, resources } from "@/lib/content";
+
+export function generateStaticParams() { return resources.map((resource) => ({ slug: resource.slug })); }
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) { const resource = getResource((await params).slug); return { title: resource?.title ?? "Resource", description: resource?.description }; }
+export default async function ResourcePage({ params }: { params: Promise<{ slug: string }> }) { const resource = getResource((await params).slug); if (!resource) notFound(); return <div className="page"><article className="article"><p className="eyebrow">{resource.type} / {resource.access}</p><h1>{resource.title}</h1><p className="lead">{resource.description}</p><div className="article-body"><p>This resource is for founders and teams trying to make the next question clearer before committing to a solution.</p><h2>What is inside</h2><p>A practical structure for writing down the current observation, the hypothesis it suggests, and the smallest experiment that could create useful evidence.</p><p><a className="arrow-link" href={resource.access === "Free" ? "#download" : "#request"}>{resource.access === "Free" ? "Access the resource ↗" : "Request access ↗"}</a></p></div></article></div>; }
