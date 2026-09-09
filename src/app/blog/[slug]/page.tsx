@@ -1,6 +1,19 @@
 import { notFound } from "next/navigation";
-import { getPost, posts } from "@/lib/content";
+import Link from "next/link";
+import { getPost, getRelatedPosts, getRelatedResources, posts } from "@/lib/content";
 
 export function generateStaticParams() { return posts.map((post) => ({ slug: post.slug })); }
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) { const post = getPost((await params).slug); return { title: post?.title ?? "Blog post", description: post?.excerpt }; }
-export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) { const post = getPost((await params).slug); if (!post) notFound(); return <div className="page"><article className="article"><p className="eyebrow">[{post.type}] / OBSERVATION {post.number}</p><h1>{post.title}</h1><p className="meta">PUBLISHED {post.date} · TOPIC: {post.topic}</p><p className="lead">{post.excerpt}</p><div className="article-body"><p><strong>Observation.</strong> This is a working note, published to make the question more specific. The point is not to arrive with a universal answer, but to notice what is happening closely enough to test it.</p><p>Early-stage work is full of plausible explanations. A product may need more features. A message may need more clarity. Distribution may be the constraint. Before choosing, it helps to separate the visible symptom from the underlying problem.</p><blockquote>What would we expect to see if this explanation were true?</blockquote><h2>The next useful question</h2><p>The next step is a small experiment that can teach us something, even if the result is inconvenient. That is the standard these notes are trying to hold: specific enough to be useful, modest enough to stay honest.</p></div></article></div>; }
+export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
+	const post = getPost((await params).slug);
+	if (!post) notFound();
+	const relatedPosts = getRelatedPosts(post);
+	const relatedResources = getRelatedResources(post);
+	const nextPost = post.nextSlug ? getPost(post.nextSlug) : undefined;
+	return <div className="page"><article className="article"><p className="eyebrow">[{post.type}] {post.number ? `/ ${post.number}` : ""}</p><h1>{post.title}</h1><p className="meta">PUBLISHED {post.date} · TOPIC: {post.topic}</p><p className="lead">{post.excerpt}</p><div className="article-body">{post.sections.map((section, index) => <section key={`${section.heading ?? "section"}-${index}`}>{section.heading && <h2>{section.heading}</h2>}{section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}{section.quote && <blockquote>{section.quote}</blockquote>}</section>)}</div><RelatedContent relatedPosts={relatedPosts} relatedResources={relatedResources} nextPost={nextPost} /></article></div>;
+}
+
+function RelatedContent({ relatedPosts, relatedResources, nextPost }: { relatedPosts: ReturnType<typeof getRelatedPosts>; relatedResources: ReturnType<typeof getRelatedResources>; nextPost: ReturnType<typeof getPost> }) {
+	if (!relatedPosts.length && !relatedResources.length && !nextPost) return null;
+	return <aside className="article-links"><div>{relatedPosts.length > 0 && <><p className="eyebrow">Related writing</p>{relatedPosts.map((post) => <Link href={`/blog/${post.slug}`} key={post.slug}>{post.title} ↗</Link>)}</>}{relatedResources.length > 0 && <><p className="eyebrow">Related resources</p>{relatedResources.map((resource) => <Link href={`/resources/${resource.slug}`} key={resource.slug}>{resource.title} ↗</Link>)}</>}</div>{nextPost && <div><p className="eyebrow">Next article</p><Link href={`/blog/${nextPost.slug}`}>{nextPost.title} ↗</Link></div>}</aside>;
+}
