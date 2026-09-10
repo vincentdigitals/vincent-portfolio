@@ -1,15 +1,13 @@
 import { defineField, defineType } from "sanity";
 
-type ValidationRule = { required: () => unknown };
-
 export const post = defineType({
   name: "post",
   title: "Post",
   type: "document",
   fields: [
-    defineField({ name: "title", title: "Title", type: "string", validation: (rule: ValidationRule) => rule.required() }),
-    defineField({ name: "slug", title: "Slug", type: "slug", options: { source: "title", maxLength: 96 }, validation: (rule: ValidationRule) => rule.required() }),
-    defineField({ name: "excerpt", title: "Excerpt", type: "text", rows: 3, validation: (rule: ValidationRule) => rule.required() }),
+    defineField({ name: "title", title: "Title", type: "string", validation: (rule) => rule.required() }),
+    defineField({ name: "slug", title: "Slug", type: "slug", options: { source: "title", maxLength: 96 }, validation: (rule) => rule.required() }),
+    defineField({ name: "excerpt", title: "Excerpt", type: "text", rows: 3, validation: (rule) => rule.required() }),
     defineField({ name: "body", title: "Body", type: "array", of: [{ type: "block" }] }),
     defineField({ name: "topic", title: "Topic", type: "reference", to: [{ type: "topic" }] }),
     defineField({ name: "publishedAt", title: "Published at", type: "datetime" }),
@@ -24,11 +22,11 @@ export const resource = defineType({
   title: "Resource",
   type: "document",
   fields: [
-    defineField({ name: "title", title: "Title", type: "string", validation: (rule: ValidationRule) => rule.required() }),
-    defineField({ name: "slug", title: "Slug", type: "slug", options: { source: "title", maxLength: 96 }, validation: (rule: ValidationRule) => rule.required() }),
-    defineField({ name: "description", title: "Description", type: "text", rows: 4, validation: (rule: ValidationRule) => rule.required() }),
-    defineField({ name: "type", title: "Type", type: "string", options: { list: ["Guide", "Checklist", "Framework", "Worksheet"] }, validation: (rule: ValidationRule) => rule.required() }),
-    defineField({ name: "access", title: "Access", type: "string", options: { list: ["Free", "Gated"] }, validation: (rule: ValidationRule) => rule.required() }),
+    defineField({ name: "title", title: "Title", type: "string", validation: (rule) => rule.required() }),
+    defineField({ name: "slug", title: "Slug", type: "slug", options: { source: "title", maxLength: 96 }, validation: (rule) => rule.required() }),
+    defineField({ name: "description", title: "Description", type: "text", rows: 4, validation: (rule) => rule.required() }),
+    defineField({ name: "type", title: "Type", type: "string", options: { list: ["Guide", "Checklist", "Framework", "Worksheet"] }, validation: (rule) => rule.required() }),
+    defineField({ name: "access", title: "Access", type: "string", options: { list: ["Free", "Gated"] }, validation: (rule) => rule.required() }),
     defineField({ name: "topic", title: "Topic", type: "reference", to: [{ type: "topic" }] }),
     defineField({ name: "file", title: "File", type: "file" }),
     defineField({ name: "externalLink", title: "External link", type: "url" }),
@@ -42,8 +40,8 @@ export const topic = defineType({
   title: "Topic",
   type: "document",
   fields: [
-    defineField({ name: "title", title: "Title", type: "string", validation: (rule: ValidationRule) => rule.required() }),
-    defineField({ name: "slug", title: "Slug", type: "slug", options: { source: "title", maxLength: 96 }, validation: (rule: ValidationRule) => rule.required() }),
+    defineField({ name: "title", title: "Title", type: "string", validation: (rule) => rule.required() }),
+    defineField({ name: "slug", title: "Slug", type: "slug", options: { source: "title", maxLength: 96 }, validation: (rule) => rule.required() }),
     defineField({ name: "description", title: "Description", type: "text", rows: 3 }),
   ],
 });
