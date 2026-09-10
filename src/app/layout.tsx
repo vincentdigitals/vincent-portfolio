@@ -4,9 +4,29 @@ import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://omoseebivincent.com"),
-  title: { default: "Omoseebi Vincent — Understand first.", template: "%s — Omoseebi Vincent" },
-  description: "Research and practical notes on the constraints keeping early-stage companies from growing.",
-  openGraph: { title: "Omoseebi Vincent", description: "Understand first. Validate second. Build third.", type: "website" },
+  title: {
+    default: "Omoseebi Vincent — Product, Customers & Growth",
+    template: "%s — Omoseebi Vincent"
+  },
+  description: "Product discovery, customer research, validation, positioning, marketing, and growth for early-stage founders.",
+  keywords: [
+    "early-stage founders",
+    "customer research",
+    "product discovery",
+    "product validation",
+    "market research",
+    "product positioning",
+    "startup positioning",
+    "messaging and copywriting",
+    "startup marketing",
+    "founder-led sales",
+    "early-stage growth"
+  ],
+  openGraph: {
+    title: "Omoseebi Vincent — Product, Customers & Growth",
+    description: "Product discovery, customer research, validation, positioning, marketing, and growth for early-stage founders.",
+    type: "website"
+  },
   twitter: { card: "summary_large_image" }
 };
 
