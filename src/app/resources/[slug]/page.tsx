@@ -1,13 +1,13 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getPost, getResource, resources } from "@/lib/content";
+import { getCmsSlugs, getPost, getResourceBySlug } from "@/lib/content";
 
-export function generateStaticParams() { return resources.map((resource) => ({ slug: resource.slug })); }
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) { const resource = getResource((await params).slug); return { title: resource?.title ?? "Resource", description: resource?.description }; }
+export async function generateStaticParams() { return (await getCmsSlugs("resource")).map((slug) => ({ slug })); }
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) { const resource = await getResourceBySlug((await params).slug); return { title: resource?.seoTitle || resource?.title || "Resource", description: resource?.seoDescription || resource?.description }; }
 
 export default async function ResourcePage({ params }: { params: Promise<{ slug: string }> }) {
-  const resource = getResource((await params).slug);
+  const resource = await getResourceBySlug((await params).slug);
   if (!resource) notFound();
   const relatedPosts = (resource.relatedPostSlugs ?? []).map(getPost).filter((post): post is NonNullable<ReturnType<typeof getPost>> => Boolean(post));
-  return <div className="page"><article className="article resource-detail"><p className="eyebrow">{resource.type} / {resource.access}</p><h1>{resource.title}</h1><p className="lead">{resource.description}</p><div className="article-body"><h2>What it is</h2><p>{resource.description}</p><h2>Who it is for</h2><p>{resource.audience}</p><h2>Why it exists</h2><p>{resource.purpose}</p><h2>How to use it</h2><p>{resource.howToUse}</p><p><a className="arrow-link" href={resource.access === "Free" ? "#download" : "#request"}>{resource.access === "Free" ? "Access the resource ↗" : "Request access ↗"}</a></p><div className="resource-file-note"><span className="meta">RESOURCE FILE</span><p>PDF / slide deck will be added here.</p></div>{relatedPosts.length > 0 && <section className="article-links"><div><p className="eyebrow">Related writing</p>{relatedPosts.map((post) => <Link href={`/blog/${post.slug}`} key={post.slug}>{post.title} ↗</Link>)}</div></section>}</div></article></div>;
+  return <div className="page"><article className="article resource-detail"><p className="eyebrow">{resource.type} / {resource.access}</p><h1>{resource.title}</h1><p className="lead">{resource.description}</p><div className="article-body"><h2>What it is</h2><p>{resource.description}</p><h2>Who it is for</h2><p>{resource.audience}</p><h2>Why it exists</h2><p>{resource.purpose}</p><h2>How to use it</h2><p>{resource.howToUse}</p><p><a className="arrow-link" href={resource.externalLink ?? resource.fileUrl ?? (resource.access === "Free" ? "#download" : "#request")}>{resource.access === "Free" ? "Access the resource ↗" : "Request access ↗"}</a></p><div className="resource-file-note"><span className="meta">RESOURCE FILE</span><p>{resource.fileUrl || resource.externalLink ? "Open the resource using the link above." : "PDF / slide deck will be added here."}</p></div>{relatedPosts.length > 0 && <section className="article-links"><div><p className="eyebrow">Related writing</p>{relatedPosts.map((post) => <Link href={`/blog/${post.slug}`} key={post.slug}>{post.title} ↗</Link>)}</div></section>}</div></article></div>;
 }

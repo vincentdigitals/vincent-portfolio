@@ -9,9 +9,12 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@portabletext/react": "latest",
     "next": "latest",
+    "next-sanity": "latest",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "sanity": "latest"
   },
   "devDependencies": {
     "@types/node": "latest",

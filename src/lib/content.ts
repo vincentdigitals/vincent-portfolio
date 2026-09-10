@@ -18,6 +18,9 @@ export type Post = {
   relatedPostSlugs?: string[];
   relatedResourceSlugs?: string[];
   nextSlug?: string;
+  bodyBlocks?: unknown[];
+  seoTitle?: string;
+  seoDescription?: string;
 };
 
 export type Resource = {
@@ -31,7 +34,114 @@ export type Resource = {
   purpose: string;
   howToUse: string;
   relatedPostSlugs?: string[];
+  fileUrl?: string;
+  externalLink?: string;
+  seoTitle?: string;
+  seoDescription?: string;
 };
+
+import { sanityFetch, sanityConfigured } from "@/sanity/client";
+import { postBySlugQuery, postsQuery, resourceBySlugQuery, resourcesQuery, resourceSlugsQuery, postSlugsQuery, topicTitlesQuery } from "@/sanity/queries";
+
+type SanityPost = {
+  slug: string;
+  title: string;
+  excerpt: string;
+  body?: unknown[];
+  topic?: string;
+  publishedAt?: string;
+  featured?: boolean;
+  seoTitle?: string;
+  seoDescription?: string;
+};
+
+type SanityResource = {
+  slug: string;
+  title: string;
+  description: string;
+  type: Resource["type"];
+  access: Resource["access"];
+  topic?: string;
+  file?: { asset?: { url?: string } };
+  externalLink?: string;
+  seoTitle?: string;
+  seoDescription?: string;
+};
+
+function formatDate(date?: string) {
+  return date ? new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(date)) : "";
+}
+
+function mapSanityPost(post: SanityPost): Post & { bodyBlocks?: unknown[]; seoTitle?: string; seoDescription?: string } {
+  return {
+    slug: post.slug,
+    title: post.title,
+    excerpt: post.excerpt,
+    type: "Essay",
+    topic: post.topic ?? "Uncategorised",
+    date: formatDate(post.publishedAt),
+    featured: post.featured,
+    published: true,
+    body: [],
+    sections: [],
+    bodyBlocks: post.body,
+    seoTitle: post.seoTitle,
+    seoDescription: post.seoDescription,
+  };
+}
+
+function mapSanityResource(resource: SanityResource): Resource & { fileUrl?: string; externalLink?: string; seoTitle?: string; seoDescription?: string } {
+  return {
+    slug: resource.slug,
+    title: resource.title,
+    description: resource.description,
+    type: resource.type,
+    access: resource.access,
+    topic: resource.topic ?? "Uncategorised",
+    audience: "For founders working through an early-stage problem.",
+    purpose: resource.description,
+    howToUse: "Work through the resource and adapt it to the problem in front of you.",
+    fileUrl: resource.file?.asset?.url,
+    externalLink: resource.externalLink,
+    seoTitle: resource.seoTitle,
+    seoDescription: resource.seoDescription,
+  };
+}
+
+export async function getAllPosts(): Promise<Post[]> {
+  if (!sanityConfigured) return posts;
+  const result = await sanityFetch<SanityPost[]>(postsQuery);
+  return result?.map(mapSanityPost) ?? posts;
+}
+
+export async function getPostBySlug(slug: string): Promise<Post | undefined> {
+  if (!sanityConfigured) return getPost(slug);
+  const result = await sanityFetch<SanityPost | null>(postBySlugQuery, { slug });
+  return result ? mapSanityPost(result) : undefined;
+}
+
+export async function getAllResources(): Promise<Resource[]> {
+  if (!sanityConfigured) return resources;
+  const result = await sanityFetch<SanityResource[]>(resourcesQuery);
+  return result?.map(mapSanityResource) ?? resources;
+}
+
+export async function getResourceBySlug(slug: string): Promise<Resource | undefined> {
+  if (!sanityConfigured) return getResource(slug);
+  const result = await sanityFetch<SanityResource | null>(resourceBySlugQuery, { slug });
+  return result ? mapSanityResource(result) : undefined;
+}
+
+export async function getCmsSlugs(kind: "post" | "resource"): Promise<string[]> {
+  if (!sanityConfigured) return kind === "post" ? posts.map((post) => post.slug) : resources.map((resource) => resource.slug);
+  return (await sanityFetch<string[]>(kind === "post" ? postSlugsQuery : resourceSlugsQuery)) ?? [];
+}
+
+export async function getCmsTopicTitles(): Promise<string[]> {
+  if (!sanityConfigured) return topics;
+  const result = await sanityFetch<{ title: string }[]>(topicTitlesQuery);
+  return result?.map((item: { title: string }) => item.title) ?? topics;
+}
 
 const rawPosts = [
   { slug: "the-problem-behind-the-problem", title: "The problem behind the problem", excerpt: "A first pass at separating the constraint a founder can see from the one actually keeping the company still.", type: "Observation" as const, topic: "Product", date: "08 Sep 2026", number: "014", featured: true, body: ["When a founder says the business is not growing, the visible problem is often only the outcome. The useful work starts by asking what is causing it.", "A lack of customers can come from weak demand, poor positioning, unclear messaging, ineffective distribution, a broken sales process, weak retention, or a product that does not solve an important problem well enough.", "The constraint you can see is not always the constraint you need to fix. Before choosing another tactic, understand what is actually happening.", "That means looking for evidence, testing assumptions, and finding the part of the system that is limiting progress right now."] },
