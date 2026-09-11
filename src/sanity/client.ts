@@ -16,5 +16,9 @@ export const sanityClient = sanityConfigured
 
 export async function sanityFetch<T>(query: string, params: Record<string, unknown> = {}) {
   if (!sanityClient) return null;
-  return sanityClient.fetch<T>(query, params);
+  try {
+    return await sanityClient.fetch<T>(query, params);
+  } catch {
+    return null;
+  }
 }

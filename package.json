@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "sanity": "sanity dev"
   },
   "dependencies": {
     "@portabletext/react": "latest",
@@ -14,15 +15,16 @@
     "next-sanity": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "sanity": "latest"
+    "sanity": "latest",
+    "styled-components": "^6.5.3"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "latest",
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "eslint": "latest",
     "eslint-config-next": "latest",
-    "@tailwindcss/postcss": "latest",
     "postcss": "latest",
     "tailwindcss": "latest",
     "typescript": "latest"
