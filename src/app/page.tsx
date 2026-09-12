@@ -2,22 +2,137 @@ import Link from "next/link";
 import { getAllPosts, getAllResources } from "@/lib/content";
 
 const workAreas = [
-  { number: "01", title: "Customers & Problems", copy: "Understand who the customer is, what they are trying to accomplish, what is getting in their way, and whether the problem is important enough to solve.", terms: "Customer research · Problem discovery · Market research · Validation" },
-  { number: "02", title: "Product & Demand", copy: "Examine whether the product is solving a meaningful problem, what evidence exists for demand, and what should be tested before more resources go into building.", terms: "Product discovery · Product strategy · MVPs · Experiments" },
-  { number: "03", title: "Positioning & Message", copy: "Make it easier for the right people to understand what the product is, why it matters, and why they should care.", terms: "Positioning · Messaging · Copy · Offers" },
-  { number: "04", title: "Marketing & Growth", copy: "When the product is getting attention but growth is not moving the way it should, find where the system is breaking down.", terms: "Distribution · Founder-led sales · Acquisition · Retention · Growth experiments" },
+  { number: "01", title: "Customers & Problems", copy: "Understand the customer, the problem, and what is actually happening before deciding what to build or change.", terms: "Customer research · Problem discovery · Validation" },
+  { number: "02", title: "Product & Positioning", copy: "Work out whether the product solves a meaningful problem and whether the right people understand why it matters.", terms: "Product discovery · Product strategy · Positioning · Messaging" },
+  { number: "03", title: "Marketing & Sales", copy: "Find better ways to reach the right people, communicate the value, and turn attention into real conversations and customers.", terms: "Marketing · Distribution · Copy · Founder-led sales" },
+  { number: "04", title: "Growth", copy: "Look at the whole system to find what is limiting growth now — then decide what deserves attention.", terms: "Acquisition · Retention · Experiments · Growth" },
 ];
+
+const temporaryPost = {
+  slug: "the-problem-behind-the-problem",
+  title: "The problem behind the problem",
+  excerpt: "A business not growing is an outcome. The useful question is what is causing it.",
+};
 
 export default async function Home() {
   const [posts, resources] = await Promise.all([getAllPosts(), getAllResources()]);
-  return <div className="page">
-    <section className="hero"><div><p className="eyebrow">FOR EARLY-STAGE FOUNDERS</p><h1>When growth stalls, <em>find out why.</em></h1></div><div className="hero-aside"><p>I help early-stage founders understand what is preventing their business from growing — and figure out what to work on next.</p><p>The problem might be the product, the customer, the positioning, the message, the way you&apos;re reaching people, or something else entirely.</p><Link className="arrow-link" href="/blog">Explore the work →</Link>{" "}<Link className="arrow-link" href="/blog">Read the thinking →</Link></div></section>
-    <section className="section"><p className="eyebrow">THE PROBLEM</p><h2>Growth problems are rarely as simple as they look.</h2><div className="copy-columns"><div><p>“We need more customers.”</p><p>“We need better marketing.”</p><p>“We need to build this feature.”</p><p>“We need to improve our conversion rate.”</p></div><div><p>Sometimes those are the right answers.</p><p>Sometimes they&apos;re symptoms.</p><p>Before adding another tactic, feature, campaign, or channel, I want to understand what is actually getting in the way.</p></div></div><p className="closing-line">Understand the problem.<br />Find the constraint.<br />Decide what to change.</p></section>
-    <section className="section"><p className="eyebrow">THE WORK</p><h2>Start with the problem. Then decide what deserves attention.</h2><div className="method-copy">{workAreas.map((area) => <div className="method-step" key={area.number}><span className="label">{area.number} — {area.title}</span><p>{area.copy}</p><p className="small-copy">{area.terms}</p></div>)}</div><p className="closing-line">The point isn&apos;t to do all of these things. It&apos;s to find the thing that matters most right now.</p></section>
-    <section className="section method"><div><p className="eyebrow">THE APPROACH</p><h2>Don&apos;t start with the solution.</h2></div><div><p className="workflow">UNDERSTAND → VALIDATE → DECIDE → BUILD → LEARN</p><div className="copy-columns"><div><p>Start with what you know.</p><p>What is actually happening?</p><p>What are we assuming?</p></div><div><p>What evidence do we have?</p><p>What would change our mind?</p><p>What is the smallest useful test?</p></div></div><p className="closing-line">Understand first.<br />Validate second.<br />Build third.</p></div></section>
-    <section className="section"><p className="eyebrow">ABOUT VINCENT</p><h2>I work at the intersection of product, customers, and growth.</h2><div className="copy-columns"><div><p>I&apos;m Omoseebi Vincent.</p><p>My work sits across product discovery, customer research, validation, positioning, marketing, and product building.</p></div><div><p>I care about the decisions that happen before and around building: understanding the problem, identifying who it matters to, testing what might be true, and deciding what deserves to be built or changed.</p><p>I believe good products and good growth decisions start with understanding what is actually happening — not simply doing more of what everyone else is doing.</p></div></div><p className="closing-line">Understand first.<br />Validate second.<br />Build third.</p><Link className="arrow-link" href="/about">More about my work →</Link></section>
-    <section className="section"><div className="section-head"><div><p className="eyebrow">WRITING</p><h2>Thinking through the problems behind growth.</h2></div><Link className="arrow-link" href="/blog">Read all writing →</Link></div><p className="section-intro">Research, observations, experiments, and practical thinking about customers, products, positioning, marketing, and early-stage growth.</p><div className="post-grid">{posts.slice(0, 3).map((post) => <Link className="post" href={`/blog/${post.slug}`} key={post.slug}><span className="tag">[{post.type}]</span><h3>{post.title}</h3><p>{post.excerpt}</p><span className="meta">{post.number ?? "—"} · {post.date} · {post.topic}</span></Link>)}</div></section>
-    <section className="section"><div className="section-head"><div><p className="eyebrow">RESOURCES</p><h2>Tools for doing the work.</h2></div><Link className="arrow-link" href="/resources">Explore resources →</Link></div><p className="section-intro">Practical worksheets, checklists, and frameworks for understanding customers, testing ideas, clarifying positioning, and making better product decisions.</p>{resources.length > 0 ? <div className="resource-strip">{resources.slice(0, 3).map((resource) => <Link className="resource" href={`/resources/${resource.slug}`} key={resource.slug}><span className="tag">{resource.type} / {resource.access}</span><h3>{resource.title}</h3><p>{resource.description}</p></Link>)}</div> : <p className="empty-state">Resources will appear here as practical tools are published.</p>}</section>
-    <section className="section"><div className="newsletter"><p className="eyebrow">START WITH THE PROBLEM</p><h2>Before you do more, make sure you know what needs fixing.</h2><p>More features won&apos;t fix the wrong problem.</p><p>More traffic won&apos;t fix the wrong message.</p><p>More tactics won&apos;t fix a constraint you haven&apos;t identified.</p><p>Start with the problem.</p><Link className="arrow-link" href="/blog">Explore the work →</Link></div></section>
-  </div>;
+  const latestPosts = posts.length > 0 ? posts.slice(0, 3) : [temporaryPost];
+
+  return (
+    <div className="page">
+      <section className="hero">
+        <div>
+          <p className="eyebrow">FOR EARLY-STAGE FOUNDERS</p>
+          <h1>Find what&apos;s holding your growth back.</h1>
+        </div>
+        <div className="hero-aside">
+          <p>I help early-stage founders understand what is getting in the way of growth — and decide what to fix next.</p>
+          <p>Product. Customers. Positioning. Marketing. Sales. Growth.</p>
+          <Link className="arrow-link" href="/about">See how I work →</Link>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="section-head">
+          <div>
+            <p className="eyebrow">LATEST THINKING</p>
+            <h2>What I&apos;m thinking about.</h2>
+          </div>
+          <Link className="arrow-link" href="/blog">Read the blog →</Link>
+        </div>
+        <p className="section-intro">Ideas and practical thinking about the problems that sit behind product and growth.</p>
+        <div className="post-grid">
+          {latestPosts.map((post) => (
+            <Link className="post" href={`/blog/${post.slug}`} key={post.slug}>
+              <h3>{post.title}</h3>
+              <p>{post.excerpt}</p>
+              <span className="meta">Read →</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="section">
+        <p className="eyebrow">WHAT I WORK ON</p>
+        <h2>Find the problem. Then work on the right thing.</h2>
+        <div className="method-copy">
+          {workAreas.map((area) => (
+            <div className="method-step" key={area.number}>
+              <span className="label">{area.number} — {area.title}</span>
+              <p>{area.copy}</p>
+              <p className="small-copy">{area.terms}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="section method">
+        <div>
+          <p className="eyebrow">HOW I WORK</p>
+          <h2>Understand first. Then decide.</h2>
+        </div>
+        <div>
+          <p className="workflow">UNDERSTAND → VALIDATE → DECIDE → BUILD → LEARN</p>
+          <div className="copy-columns">
+            <div>
+              <p>What is actually happening?</p>
+              <p>What are we assuming?</p>
+            </div>
+            <div>
+              <p>What evidence do we have?</p>
+              <p>What is the smallest useful test?</p>
+            </div>
+          </div>
+          <p className="closing-line">Understand first.<br />Validate second.<br />Build third.</p>
+        </div>
+      </section>
+
+      <section className="section">
+        <p className="eyebrow">ABOUT</p>
+        <h2>Product, customers, and growth are connected.</h2>
+        <div className="copy-columns">
+          <div>
+            <p>I&apos;m Omoseebi Vincent. My work sits across product discovery, customer research, validation, positioning, marketing, sales, and product building.</p>
+          </div>
+          <div>
+            <p>I care about the decisions around building: understanding the problem, knowing who it matters to, testing what might be true, and deciding what deserves attention.</p>
+          </div>
+        </div>
+        <Link className="arrow-link" href="/about">More about my work →</Link>
+      </section>
+
+      <section className="section">
+        <div className="section-head">
+          <div>
+            <p className="eyebrow">RESOURCES</p>
+            <h2>Useful tools for the work.</h2>
+          </div>
+          <Link className="arrow-link" href="/resources">View resources →</Link>
+        </div>
+        <p className="section-intro">Practical worksheets, checklists, and frameworks for customer research, validation, positioning, and product decisions.</p>
+        {resources.length > 0 ? (
+          <div className="resource-strip">
+            {resources.slice(0, 3).map((resource) => (
+              <Link className="resource" href={`/resources/${resource.slug}`} key={resource.slug}>
+                <span className="tag">{resource.type}</span>
+                <h3>{resource.title}</h3>
+                <p>{resource.description}</p>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <p className="empty-state">Resources will appear here as they are published.</p>
+        )}
+      </section>
+
+      <section className="section">
+        <div className="newsletter">
+          <p className="eyebrow">START WITH THE PROBLEM</p>
+          <h2>Before doing more, make sure you know what needs fixing.</h2>
+          <p>More features won&apos;t fix the wrong problem. More traffic won&apos;t fix the wrong message.</p>
+          <Link className="arrow-link" href="/contact">Talk about the problem →</Link>
+        </div>
+      </section>
+    </div>
+  );
 }
