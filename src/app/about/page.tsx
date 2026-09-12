@@ -1,3 +1,31 @@
-export const metadata = { title: "About" };
+export const metadata = {
+  title: "About",
+  description: "Omoseebi Vincent works across product discovery, customer research, positioning, marketing, sales, and product building.",
+};
 
-export default function About() { return <div className="page"><section className="page-intro"><p className="eyebrow">ABOUT</p><h1>I care about what happens before the obvious answer.</h1><p>I work with early-stage founders around the questions that sit between an idea, a product, and growth.</p></section><article className="article"><div className="article-body"><p>I&apos;m Omoseebi Vincent.</p><p>What problem are we actually solving?</p><p>Who has the problem?</p><p>How important is it?</p><p>What evidence do we have?</p><p>Why isn&apos;t the business growing the way we expected?</p><p>And what should we do next?</p><p>My background spans product engineering, product management, research, and marketing.</p><p>That combination shapes how I approach problems: I don&apos;t want to look at the product in isolation from the people who use it, or growth in isolation from the product underneath it.</p><p>Sometimes the answer is to build.</p><p>Sometimes it is to talk to customers.</p><p>Sometimes it is to change the message.</p><p>Sometimes it is to stop doing something that isn&apos;t working.</p><p>The important part is knowing which one the situation actually calls for.</p><h2>My operating principle</h2><blockquote>Understand first.<br />Validate second.<br />Build third.</blockquote><p>This site brings together the work behind that approach — the research, writing, experiments, tools, and products I build along the way.</p></div></article></div>; }
+export default function About() {
+  return (
+    <div className="page">
+      <section className="page-intro">
+        <p className="eyebrow">ABOUT</p>
+        <h1>Product, customers, and growth.</h1>
+        <p>I work with early-stage founders on the questions that sit between building a product and growing a business.</p>
+      </section>
+
+      <article className="article">
+        <div className="article-body">
+          <p>I&apos;m Omoseebi Vincent.</p>
+          <p>I help founders understand what is getting in the way of growth — whether the issue is the product, the customer, the positioning, the message, marketing, sales, or something else.</p>
+          <p>My work spans product discovery, customer research, validation, positioning, marketing, sales, and product building.</p>
+          <p>I don&apos;t believe every growth problem needs another feature, another campaign, or another channel. Sometimes the right move is to build. Sometimes it is to talk to customers, change the message, test an assumption, or stop doing something that is not working.</p>
+          <p>The job is to understand the situation well enough to know which one.</p>
+
+          <h2>How I work</h2>
+          <blockquote>Understand first.<br />Validate second.<br />Build third.</blockquote>
+
+          <p>That principle shapes how I approach products and growth: start with the problem, look for evidence, make the decision, then act.</p>
+        </div>
+      </article>
+    </div>
+  );
+}
