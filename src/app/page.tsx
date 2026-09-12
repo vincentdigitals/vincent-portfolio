@@ -93,7 +93,6 @@ export default async function HomePage() {
           <p>What is actually happening? What do customers need? What assumption is behind the decision? What evidence do we have?</p>
           <p>Then decide what deserves attention, act on it, and learn from what happens.</p>
         </div>
-        <p className="closing-line">Understand first. Validate second. Build third.</p>
       </section>
 
       <section className="section about-preview">
