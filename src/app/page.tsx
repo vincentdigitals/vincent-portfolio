@@ -2,7 +2,6 @@ import Link from "next/link";
 import { getAllPosts, getAllResources } from "@/lib/content";
 
 const temporaryPost = {
-  slug: "the-problem-behind-the-problem",
   title: "The problem behind the problem",
   excerpt: "A business not growing is an outcome. The useful question is what is causing it."
 };
@@ -34,9 +33,9 @@ export default async function HomePage() {
     <div>
       <section className="hero">
         <p className="eyebrow">FOR EARLY-STAGE FOUNDERS</p>
-        <h1>Find what&apos;s holding your growth back.</h1>
+        <h1>Find what&apos;s holding your growth back. Fix the right thing.</h1>
         <p className="hero-copy">
-          I help early-stage founders understand what is getting in the way of growth — and decide what to fix next.
+          I help early-stage founders understand what is getting in the way of growth, decide what needs fixing, and work on it.
         </p>
         <p className="hero-scope">Product. Customers. Positioning. Marketing. Sales. Growth.</p>
         <Link className="arrow-link" href="/about">See how I work →</Link>
@@ -74,7 +73,7 @@ export default async function HomePage() {
 
       <section className="section">
         <p className="eyebrow">WHAT I WORK ON</p>
-        <h2>Find the problem. Then work on the right thing.</h2>
+        <h2>Find the problem. Fix what matters.</h2>
         <div className="work-grid">
           {workAreas.map((area, index) => (
             <article className="work-item" key={area.title}>
@@ -88,11 +87,11 @@ export default async function HomePage() {
 
       <section className="section">
         <p className="eyebrow">HOW I WORK</p>
-        <h2>Understand first. Then decide.</h2>
-        <p className="workflow">UNDERSTAND → VALIDATE → DECIDE → BUILD → LEARN</p>
+        <h2>Understand. Diagnose. Fix. Learn.</h2>
+        <p className="workflow">UNDERSTAND → DIAGNOSE → FIX → LEARN</p>
         <div className="two-column-copy">
           <p>What is actually happening? What do customers need? What assumption is behind the decision? What evidence do we have?</p>
-          <p>The goal is not to do more. It is to understand enough to know what deserves attention.</p>
+          <p>Then decide what deserves attention, act on it, and learn from what happens.</p>
         </div>
         <p className="closing-line">Understand first. Validate second. Build third.</p>
       </section>
