@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { getCmsSlugs, getCmsTopicTitles, getTopicSlug } from "@/lib/content";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = "https://omoseebivincent.com";
+  const base = "https://omoseebivincent.site";
   const staticPaths = ["", "/about", "/blog", "/resources", "/privacy"];
   const [postSlugs, resourceSlugs, topics] = await Promise.all([getCmsSlugs("post"), getCmsSlugs("resource"), getCmsTopicTitles()]);
   const postPaths = postSlugs.map((slug) => `/blog/${slug}`);
