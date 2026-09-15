@@ -13,7 +13,27 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const relatedPosts = getRelatedPosts(post);
   const relatedResources = getRelatedResources(post);
   const nextPost = post.nextSlug ? getPostBySlug(post.nextSlug) : undefined;
-  return <div className="page"><article className="article"><p className="eyebrow">[{post.type}] {post.number ? `/ ${post.number}` : ""}</p><h1>{post.title}</h1><p className="meta">PUBLISHED {post.date} · TOPIC: {post.topic}</p><p className="lead">{post.excerpt}</p><div className="article-body">{"bodyBlocks" in post && post.bodyBlocks?.length ? <PortableTextBlocks blocks={post.bodyBlocks} /> : post.sections.map((section, index) => <section key={`${section.heading ?? "section"}-${index}`}>{section.heading && <h2>{section.heading}</h2>}{section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}{section.quote && <blockquote>{section.quote}</blockquote>}</section>)}</div><RelatedContent relatedPosts={relatedPosts} relatedResources={relatedResources} nextPost={await nextPost} /></article></div>;
+
+  return (
+    <div className="page">
+      <article className="article">
+        <p className="eyebrow">{post.topic}</p>
+        <h1>{post.title}</h1>
+        <p className="meta">{post.date}</p>
+        <p className="lead">{post.excerpt}</p>
+        <div className="article-body">
+          {"bodyBlocks" in post && post.bodyBlocks?.length ? <PortableTextBlocks blocks={post.bodyBlocks} /> : post.sections.map((section, index) => (
+            <section key={`${section.heading ?? "section"}-${index}`}>
+              {section.heading && <h2>{section.heading}</h2>}
+              {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+              {section.quote && <blockquote>{section.quote}</blockquote>}
+            </section>
+          ))}
+        </div>
+        <RelatedContent relatedPosts={relatedPosts} relatedResources={relatedResources} nextPost={await nextPost} />
+      </article>
+    </div>
+  );
 }
 
 function PortableTextBlocks({ blocks }: { blocks: unknown[] }) {
@@ -35,5 +55,13 @@ function isPortableTextBlock(value: unknown): value is { style?: string; childre
 
 function RelatedContent({ relatedPosts, relatedResources, nextPost }: { relatedPosts: Post[]; relatedResources: ReturnType<typeof getRelatedResources>; nextPost?: Post }) {
   if (!relatedPosts.length && !relatedResources.length && !nextPost) return null;
-  return <aside className="article-links"><div>{relatedPosts.length > 0 && <><p className="eyebrow">Related writing</p>{relatedPosts.map((post) => <Link href={`/blog/${post.slug}`} key={post.slug}>{post.title} ↗</Link>)}</>}{relatedResources.length > 0 && <><p className="eyebrow">Related resources</p>{relatedResources.map((resource) => <Link href={`/resources/${resource.slug}`} key={resource.slug}>{resource.title} ↗</Link>)}</>}</div>{nextPost && <div><p className="eyebrow">Next article</p><Link href={`/blog/${nextPost.slug}`}>{nextPost.title} ↗</Link></div>}</aside>;
+  return (
+    <aside className="article-links">
+      <div>
+        {relatedPosts.length > 0 && <><p className="eyebrow">Related writing</p>{relatedPosts.map((post) => <Link href={`/blog/${post.slug}`} key={post.slug}>{post.title} ↗</Link>)}</>}
+        {relatedResources.length > 0 && <><p className="eyebrow">Related resources</p>{relatedResources.map((resource) => <Link href={`/resources/${resource.slug}`} key={resource.slug}>{resource.title} ↗</Link>)}</>}
+      </div>
+      {nextPost && <div><p className="eyebrow">Next</p><Link href={`/blog/${nextPost.slug}`}>{nextPost.title} ↗</Link></div>}
+    </aside>
+  );
 }
