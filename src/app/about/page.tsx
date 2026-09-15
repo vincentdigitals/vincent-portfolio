@@ -7,7 +7,7 @@ export default function About() {
   return (
     <div className="page">
       <section className="page-intro">
-        <p className="eyebrow">ABOUT</p>
+        <p className="eyebrow">ABOUT ME</p>
         <h1>Product, customers, and growth.</h1>
         <p>I work with early-stage founders on the questions that sit between building a product and growing a business.</p>
       </section>
