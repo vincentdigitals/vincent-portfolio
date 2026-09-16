@@ -1,5 +1,32 @@
 import { defineField, defineType } from "sanity";
 
+export const author = defineType({
+  name: "author",
+  title: "Author",
+  type: "document",
+  fields: [
+    defineField({ name: "name", title: "Name", type: "string", initialValue: "Omoseebi Vincent", validation: (rule) => rule.required() }),
+    defineField({ name: "slug", title: "Slug", type: "slug", initialValue: { current: "omoseebi-vincent" }, options: { source: "name", maxLength: 96 }, validation: (rule) => rule.required() }),
+    defineField({ name: "bio", title: "Bio", type: "text", rows: 4 }),
+    defineField({ name: "image", title: "Image", type: "image", options: { hotspot: true } }),
+    defineField({ name: "url", title: "Profile URL", type: "url", initialValue: "https://omoseebivincent.site/about" }),
+    defineField({
+      name: "sameAs",
+      title: "Social profiles",
+      type: "array",
+      initialValue: [
+        "https://www.linkedin.com/in/omoseebi-vincent/",
+        "https://www.instagram.com/vincentomoseebi/",
+        "https://www.youtube.com/@omoseebivincent_creates",
+      ],
+      of: [{ type: "url" }],
+    }),
+  ],
+  preview: {
+    select: { title: "name", media: "image" },
+  },
+});
+
 export const post = defineType({
   name: "post",
   title: "Post",
@@ -9,6 +36,7 @@ export const post = defineType({
     defineField({ name: "slug", title: "Slug", type: "slug", options: { source: "title", maxLength: 96 }, validation: (rule) => rule.required() }),
     defineField({ name: "excerpt", title: "Excerpt", type: "text", rows: 3, validation: (rule) => rule.required() }),
     defineField({ name: "body", title: "Body", type: "array", of: [{ type: "block" }] }),
+    defineField({ name: "author", title: "Author", type: "reference", to: [{ type: "author" }] }),
     defineField({ name: "topic", title: "Topic", type: "reference", to: [{ type: "topic" }] }),
     defineField({ name: "publishedAt", title: "Published at", type: "datetime" }),
     defineField({ name: "featured", title: "Featured", type: "boolean", initialValue: false }),
@@ -46,4 +74,4 @@ export const topic = defineType({
   ],
 });
 
-export const schemaTypes = [post, resource, topic];
+export const schemaTypes = [author, post, resource, topic];

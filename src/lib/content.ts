@@ -3,6 +3,15 @@ export const contentTypes: ContentType[] = ["Observation", "Hypothesis", "Experi
 
 export type ArticleSection = { heading?: string; paragraphs: string[]; quote?: string; };
 
+export type Author = {
+  name: string;
+  slug?: string;
+  bio?: string;
+  image?: string;
+  url?: string;
+  sameAs?: string[];
+};
+
 export type Post = {
   slug: string;
   title: string;
@@ -10,6 +19,7 @@ export type Post = {
   type: ContentType;
   topic: string;
   date: string;
+  publishedAt?: string;
   number?: string;
   featured?: boolean;
   published?: boolean;
@@ -21,6 +31,7 @@ export type Post = {
   bodyBlocks?: unknown[];
   seoTitle?: string;
   seoDescription?: string;
+  author?: Author;
 };
 
 export type Resource = {
@@ -43,12 +54,21 @@ export type Resource = {
 import { sanityFetch, sanityConfigured } from "@/sanity/client";
 import { postBySlugQuery, postsQuery, resourceBySlugQuery, resourcesQuery, resourceSlugsQuery, postSlugsQuery, topicTitlesQuery } from "@/sanity/queries";
 
+type SanityAuthor = {
+  name?: string;
+  slug?: string;
+  bio?: string;
+  url?: string;
+  sameAs?: string[];
+};
+
 type SanityPost = {
   slug: string;
   title: string;
   excerpt: string;
   body?: unknown[];
   topic?: string;
+  author?: SanityAuthor | null;
   publishedAt?: string;
   featured?: boolean;
   seoTitle?: string;
@@ -72,7 +92,22 @@ function formatDate(date?: string) {
   return date ? new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(date)) : "";
 }
 
+function getDefaultAuthor(): Author {
+  return {
+    name: "Omoseebi Vincent",
+    url: "https://omoseebivincent.site/about",
+    sameAs: [
+      "https://www.linkedin.com/in/omoseebi-vincent/",
+      "https://www.instagram.com/vincentomoseebi/",
+      "https://www.youtube.com/@omoseebivincent_creates",
+    ],
+  };
+}
+
 function mapSanityPost(post: SanityPost): Post & { bodyBlocks?: unknown[]; seoTitle?: string; seoDescription?: string } {
+  const defaultAuthor = getDefaultAuthor();
+  const author = post.author ? { name: post.author.name ?? defaultAuthor.name, slug: post.author.slug, bio: post.author.bio, url: post.author.url ?? defaultAuthor.url, sameAs: post.author.sameAs?.length ? post.author.sameAs : defaultAuthor.sameAs } : defaultAuthor;
+
   return {
     slug: post.slug,
     title: post.title,
@@ -80,6 +115,7 @@ function mapSanityPost(post: SanityPost): Post & { bodyBlocks?: unknown[]; seoTi
     type: "Essay",
     topic: post.topic ?? "Uncategorised",
     date: formatDate(post.publishedAt),
+    publishedAt: post.publishedAt,
     featured: post.featured,
     published: true,
     body: [],
@@ -87,6 +123,7 @@ function mapSanityPost(post: SanityPost): Post & { bodyBlocks?: unknown[]; seoTi
     bodyBlocks: post.body,
     seoTitle: post.seoTitle,
     seoDescription: post.seoDescription,
+    author,
   };
 }
 

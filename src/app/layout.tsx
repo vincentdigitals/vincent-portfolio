@@ -3,7 +3,8 @@ import "./globals.css";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://omoseebivincent.com"),
+  metadataBase: new URL("https://omoseebivincent.site"),
+  alternates: { canonical: "https://omoseebivincent.site" },
   title: {
     default: "Omoseebi Vincent — Product, Customers & Growth",
     template: "%s — Omoseebi Vincent"
@@ -25,7 +26,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Omoseebi Vincent — Product, Customers & Growth",
     description: "Product discovery, customer research, validation, positioning, marketing, and growth for early-stage founders.",
-    type: "website"
+    url: "https://omoseebivincent.site",
+    type: "website",
+    siteName: "Omoseebi Vincent"
   },
   twitter: { card: "summary_large_image" }
 };

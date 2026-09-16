@@ -3,7 +3,11 @@ import Link from "next/link";
 import { getCmsSlugs, getPost, getResourceBySlug } from "@/lib/content";
 
 export async function generateStaticParams() { return (await getCmsSlugs("resource")).map((slug) => ({ slug })); }
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) { const resource = await getResourceBySlug((await params).slug); return { title: resource?.seoTitle || resource?.title || "Resource", description: resource?.seoDescription || resource?.description }; }
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const resource = await getResourceBySlug((await params).slug);
+  const canonical = resource ? `https://omoseebivincent.site/resources/${resource.slug}` : "https://omoseebivincent.site/resources";
+  return { title: resource?.seoTitle || resource?.title || "Resource", description: resource?.seoDescription || resource?.description, alternates: { canonical }, openGraph: { url: canonical, title: resource?.title } };
+}
 
 export default async function ResourcePage({ params }: { params: Promise<{ slug: string }> }) {
   const resource = await getResourceBySlug((await params).slug);
