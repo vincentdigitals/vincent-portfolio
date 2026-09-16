@@ -1,9 +1,12 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export function SiteHeader() {
   return (
     <header className="site-header">
-      <Link className="wordmark" href="/">OV<span>.</span></Link>
+      <Link className="profile-link" href="/" aria-label="Home">
+        <Image className="profile-image" src="/profile.jpg" alt="Omoseebi Vincent" width={52} height={52} priority />
+      </Link>
       <nav aria-label="Main navigation">
         <Link href="/blog">Blog</Link>
         <Link href="/resources">Resources</Link>

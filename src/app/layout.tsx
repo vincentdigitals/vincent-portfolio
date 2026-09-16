@@ -30,7 +30,11 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Omoseebi Vincent"
   },
-  twitter: { card: "summary_large_image" }
+  twitter: { card: "summary_large_image" },
+  icons: {
+    icon: "/profile.jpg",
+    apple: "/profile.jpg"
+  }
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
