@@ -25,7 +25,7 @@ export default async function Blog() {
               <span className="tag">{post.topic}</span>
               <h3>{post.title}</h3>
               <p>{post.excerpt}</p>
-              <span className="meta">Read →</span>
+              <span className="read-link">Read article →</span>
             </Link>
           ))}
           {posts.length === 0 && <p className="empty-state">New writing will appear here.</p>}
