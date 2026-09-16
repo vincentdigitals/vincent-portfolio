@@ -1,18 +1,18 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getCmsSlugs, getPost, getResourceBySlug } from "@/lib/content";
+import { getCmsSlugs, getRelatedPostsForResource, getResourceBySlug } from "@/lib/content";
 
 export async function generateStaticParams() { return (await getCmsSlugs("resource")).map((slug) => ({ slug })); }
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const resource = await getResourceBySlug((await params).slug);
   const canonical = resource ? `https://omoseebivincent.site/resources/${resource.slug}` : "https://omoseebivincent.site/resources";
-  return { title: resource?.seoTitle || resource?.title || "Resource", description: resource?.seoDescription || resource?.description, alternates: { canonical }, openGraph: { url: canonical, title: resource?.title } };
+  return { title: resource?.seoTitle || resource?.title || "Resource", description: resource?.seoDescription || resource?.description, alternates: { canonical }, openGraph: { url: canonical, title: resource?.title, description: resource?.seoDescription || resource?.description, type: "article" }, twitter: { card: "summary", title: resource?.title, description: resource?.seoDescription || resource?.description } };
 }
 
 export default async function ResourcePage({ params }: { params: Promise<{ slug: string }> }) {
   const resource = await getResourceBySlug((await params).slug);
   if (!resource) notFound();
-  const relatedPosts = (resource.relatedPostSlugs ?? []).map(getPost).filter((post): post is NonNullable<ReturnType<typeof getPost>> => Boolean(post));
+  const relatedPosts = await getRelatedPostsForResource(resource);
 
   return (
     <div className="page">

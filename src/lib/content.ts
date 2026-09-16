@@ -20,6 +20,7 @@ export type Post = {
   topic: string;
   date: string;
   publishedAt?: string;
+  modifiedAt?: string;
   number?: string;
   featured?: boolean;
   published?: boolean;
@@ -52,7 +53,7 @@ export type Resource = {
 };
 
 import { sanityFetch, sanityConfigured } from "@/sanity/client";
-import { postBySlugQuery, postsQuery, resourceBySlugQuery, resourcesQuery, resourceSlugsQuery, postSlugsQuery, topicTitlesQuery } from "@/sanity/queries";
+import { postBySlugQuery, postsQuery, resourceBySlugQuery, resourcesQuery, resourceSlugsQuery, postSlugsQuery, topicTitlesQuery, topicBySlugQuery } from "@/sanity/queries";
 
 type SanityAuthor = {
   name?: string;
@@ -69,7 +70,11 @@ type SanityPost = {
   body?: unknown[];
   topic?: string;
   author?: SanityAuthor | null;
+  relatedPostSlugs?: string[];
+  relatedResourceSlugs?: string[];
+  nextSlug?: string;
   publishedAt?: string;
+  modifiedAt?: string;
   featured?: boolean;
   seoTitle?: string;
   seoDescription?: string;
@@ -82,6 +87,7 @@ type SanityResource = {
   type: Resource["type"];
   access: Resource["access"];
   topic?: string;
+  relatedPostSlugs?: string[];
   file?: { asset?: { url?: string } };
   externalLink?: string;
   seoTitle?: string;
@@ -116,6 +122,7 @@ function mapSanityPost(post: SanityPost): Post & { bodyBlocks?: unknown[]; seoTi
     topic: post.topic ?? "Uncategorised",
     date: formatDate(post.publishedAt),
     publishedAt: post.publishedAt,
+    modifiedAt: post.modifiedAt,
     featured: post.featured,
     published: true,
     body: [],
@@ -124,6 +131,9 @@ function mapSanityPost(post: SanityPost): Post & { bodyBlocks?: unknown[]; seoTi
     seoTitle: post.seoTitle,
     seoDescription: post.seoDescription,
     author,
+    relatedPostSlugs: post.relatedPostSlugs,
+    relatedResourceSlugs: post.relatedResourceSlugs,
+    nextSlug: post.nextSlug,
   };
 }
 
@@ -142,6 +152,7 @@ function mapSanityResource(resource: SanityResource): Resource & { fileUrl?: str
     externalLink: resource.externalLink,
     seoTitle: resource.seoTitle,
     seoDescription: resource.seoDescription,
+    relatedPostSlugs: resource.relatedPostSlugs,
   };
 }
 
@@ -181,13 +192,35 @@ export async function getCmsTopicTitles(): Promise<string[]> {
   return result?.map((item: { title: string }) => item.title) ?? topics;
 }
 
+export async function getTopicBySlug(slug: string): Promise<string | undefined> {
+  if (!sanityConfigured) return getTopicFromSlug(slug);
+  const result = await sanityFetch<{ title: string } | null>(topicBySlugQuery, { slug });
+  return result?.title ?? getTopicFromSlug(slug);
+}
+
 export const posts: Post[] = [];
 export const resources: Resource[] = [];
 export const topics: string[] = [];
 export function getPost(slug: string) { return posts.find((post) => post.slug === slug && post.published !== false); }
 export function getResource(slug: string) { return resources.find((resource) => resource.slug === slug); }
-export function getPostsByTopic(topic: string) { return posts.filter((post) => post.published !== false && post.topic.toLowerCase() === topic.toLowerCase()); }
-export function getRelatedPosts(post: Post) { return (post.relatedPostSlugs ?? []).map(getPost).filter((related): related is Post => Boolean(related)); }
-export function getRelatedResources(post: Post) { return (post.relatedResourceSlugs ?? []).map(getResource).filter((resource): resource is Resource => Boolean(resource)); }
+export async function getPostsByTopic(topic: string): Promise<Post[]> {
+  const allPosts = await getAllPosts();
+  return allPosts.filter((post) => post.published !== false && post.topic.toLowerCase() === topic.toLowerCase());
+}
+export async function getRelatedPosts(post: Post): Promise<Post[]> {
+  if (!sanityConfigured) return (post.relatedPostSlugs ?? []).map(getPost).filter((related): related is Post => Boolean(related));
+  return (await Promise.all((post.relatedPostSlugs ?? []).map(getPostBySlug))).filter((related): related is Post => Boolean(related));
+}
+export async function getRelatedPostsForResource(resource: Resource): Promise<Post[]> {
+  if (!sanityConfigured) return (resource.relatedPostSlugs ?? []).map(getPost).filter((related): related is Post => Boolean(related));
+  return (await Promise.all((resource.relatedPostSlugs ?? []).map(getPostBySlug))).filter((related): related is Post => Boolean(related));
+}
+export async function getRelatedResources(post: Post): Promise<Resource[]> {
+  if (!sanityConfigured) return (post.relatedResourceSlugs ?? []).map(getResource).filter((related): related is Resource => Boolean(related));
+  return (await Promise.all((post.relatedResourceSlugs ?? []).map(getResourceBySlug))).filter((related): related is Resource => Boolean(related));
+}
+export async function getNextPost(post: Post): Promise<Post | undefined> {
+  return post.nextSlug ? getPostBySlug(post.nextSlug) : undefined;
+}
 export function getTopicSlug(topic: string) { return topic.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""); }
 export function getTopicFromSlug(slug: string) { return topics.find((topic) => getTopicSlug(topic) === slug); }

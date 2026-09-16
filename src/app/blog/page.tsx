@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { getAllPosts } from "@/lib/content";
 
+export const revalidate = 60;
+
 export const metadata = {
   title: "Blog",
   description: "Practical thinking on product, customers, positioning, marketing, sales, and early-stage growth.",

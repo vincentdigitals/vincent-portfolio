@@ -5,7 +5,11 @@ export const postsQuery = `*[_type == "post" && defined(slug.current) && (!defin
   body,
   "topic": topic->title,
   author->{name, url, sameAs, "slug": slug.current},
+  "relatedPostSlugs": relatedPosts[]->slug.current,
+  "relatedResourceSlugs": relatedResources[]->slug.current,
+  "nextSlug": nextPost->slug.current,
   publishedAt,
+  "modifiedAt": _updatedAt,
   featured,
   seoTitle,
   seoDescription
@@ -18,7 +22,11 @@ export const postBySlugQuery = `*[_type == "post" && slug.current == $slug && (!
   body,
   "topic": topic->title,
   author->{name, url, sameAs, "slug": slug.current},
+  "relatedPostSlugs": relatedPosts[]->slug.current,
+  "relatedResourceSlugs": relatedResources[]->slug.current,
+  "nextSlug": nextPost->slug.current,
   publishedAt,
+  "modifiedAt": _updatedAt,
   featured,
   seoTitle,
   seoDescription
@@ -31,6 +39,7 @@ export const resourcesQuery = `*[_type == "resource" && defined(slug.current)] |
   type,
   access,
   "topic": topic->title,
+  "relatedPostSlugs": relatedPosts[]->slug.current,
   file,
   externalLink,
   seoTitle,
@@ -44,6 +53,7 @@ export const resourceBySlugQuery = `*[_type == "resource" && slug.current == $sl
   type,
   access,
   "topic": topic->title,
+  "relatedPostSlugs": relatedPosts[]->slug.current,
   file,
   externalLink,
   seoTitle,
@@ -51,6 +61,7 @@ export const resourceBySlugQuery = `*[_type == "resource" && slug.current == $sl
 }`;
 
 export const topicTitlesQuery = `*[_type == "topic" && defined(slug.current)] | order(title asc) { title, "slug": slug.current, description }`;
+export const topicBySlugQuery = `*[_type == "topic" && slug.current == $slug][0] { title, "slug": slug.current, description }`;
 
 export const postSlugsQuery = `*[_type == "post" && defined(slug.current) && (!defined(publishedAt) || publishedAt <= now())].slug.current`;
 export const resourceSlugsQuery = `*[_type == "resource" && defined(slug.current)].slug.current`;

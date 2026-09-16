@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 import { getCmsSlugs, getCmsTopicTitles, getTopicSlug } from "@/lib/content";
 
+export const revalidate = 60;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = "https://omoseebivincent.site";
   const staticPaths = ["", "/about", "/blog", "/resources", "/privacy"];

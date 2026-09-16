@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { buildBlogPostingJsonLd, buildBreadcrumbJsonLd, JsonLd } from "@/components/structured-data";
-import { getCmsSlugs, getPostBySlug, getRelatedPosts, getRelatedResources, type Post } from "@/lib/content";
+import { getCmsSlugs, getNextPost, getPostBySlug, getRelatedPosts, getRelatedResources, type Post, type Resource } from "@/lib/content";
 
 export const dynamicParams = true;
 
@@ -12,16 +12,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: post?.seoTitle || post?.title || "Blog post",
     description: post?.seoDescription || post?.excerpt,
     alternates: { canonical: post ? `https://omoseebivincent.site/blog/${post.slug}` : "https://omoseebivincent.site/blog" },
-    openGraph: { url: post ? `https://omoseebivincent.site/blog/${post.slug}` : "https://omoseebivincent.site/blog", title: post?.title },
+    openGraph: { url: post ? `https://omoseebivincent.site/blog/${post.slug}` : "https://omoseebivincent.site/blog", title: post?.title, description: post?.seoDescription || post?.excerpt, type: "article" },
+    twitter: { card: "summary", title: post?.title, description: post?.seoDescription || post?.excerpt },
   };
 }
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const post = await getPostBySlug(decodeURIComponent((await params).slug).trim());
   if (!post) notFound();
-  const relatedPosts = getRelatedPosts(post);
-  const relatedResources = getRelatedResources(post);
-  const nextPost = post.nextSlug ? getPostBySlug(post.nextSlug) : undefined;
+  const [relatedPosts, relatedResources, nextPost] = await Promise.all([getRelatedPosts(post), getRelatedResources(post), getNextPost(post)]);
   const breadcrumbJson = buildBreadcrumbJsonLd([
     { name: "Home", url: "https://omoseebivincent.site/" },
     { name: "Blog", url: "https://omoseebivincent.site/blog" },
@@ -30,7 +29,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
   return (
     <>
-      <JsonLd data={buildBlogPostingJsonLd({ title: post.title, excerpt: post.excerpt, slug: post.slug, publishedAt: post.publishedAt, author: post.author })} />
+      <JsonLd data={buildBlogPostingJsonLd({ title: post.title, excerpt: post.excerpt, slug: post.slug, publishedAt: post.publishedAt, modifiedAt: post.modifiedAt, author: post.author })} />
       <JsonLd data={breadcrumbJson} />
       <div className="page">
         <article className="article">
@@ -73,7 +72,7 @@ function isPortableTextBlock(value: unknown): value is { style?: string; childre
   return Array.isArray(block.children) && block.children.every((child) => Boolean(child) && typeof child === "object" && typeof (child as { text?: unknown }).text === "string");
 }
 
-function RelatedContent({ relatedPosts, relatedResources, nextPost }: { relatedPosts: Post[]; relatedResources: ReturnType<typeof getRelatedResources>; nextPost?: Post }) {
+function RelatedContent({ relatedPosts, relatedResources, nextPost }: { relatedPosts: Post[]; relatedResources: Resource[]; nextPost?: Post }) {
   if (!relatedPosts.length && !relatedResources.length && !nextPost) return null;
   return (
     <aside className="article-links">

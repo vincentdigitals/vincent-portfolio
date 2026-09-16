@@ -31,9 +31,18 @@ export function buildBlogPostingJsonLd(post: {
   excerpt?: string;
   slug: string;
   publishedAt?: string;
+  modifiedAt?: string;
   author?: Author;
 }) {
-  const author = post.author ?? { name: "Omoseebi Vincent", url: "https://omoseebivincent.site/about" };
+  const author = post.author ?? {
+    name: "Omoseebi Vincent",
+    url: "https://omoseebivincent.site/about",
+    sameAs: [
+      "https://www.linkedin.com/in/omoseebi-vincent/",
+      "https://www.instagram.com/vincentomoseebi/",
+      "https://www.youtube.com/@omoseebivincent_creates",
+    ],
+  };
   const authorUrl = author.url || "https://omoseebivincent.site/about";
   const canonicalUrl = `https://omoseebivincent.site/blog/${post.slug}`;
 
@@ -41,11 +50,11 @@ export function buildBlogPostingJsonLd(post: {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: post.title,
-    description: post.excerpt,
+    ...(post.excerpt ? { description: post.excerpt } : {}),
     url: canonicalUrl,
     mainEntityOfPage: canonicalUrl,
-    datePublished: post.publishedAt || undefined,
-    dateModified: post.publishedAt || undefined,
+    ...(post.publishedAt ? { datePublished: post.publishedAt } : {}),
+    ...(post.modifiedAt ? { dateModified: post.modifiedAt } : {}),
     author: buildPersonEntity(author.name, authorUrl, author.sameAs),
     publisher: buildPersonEntity(author.name, authorUrl),
   };

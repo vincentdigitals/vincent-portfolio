@@ -4,7 +4,8 @@ export const metadata = {
   title: "About",
   description: "Omoseebi Vincent works across product discovery, customer research, positioning, marketing, sales, and product building.",
   alternates: { canonical: "https://omoseebivincent.site/about" },
-  openGraph: { url: "https://omoseebivincent.site/about", title: "About Omoseebi Vincent" },
+  openGraph: { url: "https://omoseebivincent.site/about", title: "About Omoseebi Vincent", description: "Omoseebi Vincent works across product discovery, customer research, positioning, marketing, sales, and product building.", type: "profile" },
+  twitter: { card: "summary", title: "About Omoseebi Vincent", description: "Omoseebi Vincent works across product discovery, customer research, positioning, marketing, sales, and product building." },
 };
 
 export default function About() {
