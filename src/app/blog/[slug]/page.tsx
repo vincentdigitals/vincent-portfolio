@@ -1,11 +1,15 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { PortableText, type PortableTextComponents } from "@portabletext/react";
 import { buildBlogPostingJsonLd, buildBreadcrumbJsonLd, JsonLd } from "@/components/structured-data";
 import { getCmsSlugs, getNextPost, getPostBySlug, getRelatedPosts, getRelatedResources, type Post, type Resource } from "@/lib/content";
 
 export const dynamicParams = true;
 
-export async function generateStaticParams() { return (await getCmsSlugs("post")).map((slug) => ({ slug })); }
+export async function generateStaticParams() {
+  return (await getCmsSlugs("post")).map((slug) => ({ slug }));
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const post = await getPostBySlug(decodeURIComponent((await params).slug).trim());
   return {
@@ -17,10 +21,44 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
+const portableTextComponents: PortableTextComponents = {
+  block: {
+    h2: ({ children }) => <h2>{children}</h2>,
+    h3: ({ children }) => <h3>{children}</h3>,
+    blockquote: ({ children }) => <blockquote>{children}</blockquote>,
+  },
+  marks: {
+    link: ({ children, value }) => {
+      const href = value?.href;
+      if (!href) return <>{children}</>;
+      const external = /^https?:\/\//i.test(href);
+      return (
+        <a href={href} target={external ? "_blank" : undefined} rel={external ? "noreferrer" : undefined}>
+          {children}
+        </a>
+      );
+    },
+  },
+  list: {
+    bullet: ({ children }) => <ul>{children}</ul>,
+    number: ({ children }) => <ol>{children}</ol>,
+  },
+  listItem: {
+    bullet: ({ children }) => <li>{children}</li>,
+    number: ({ children }) => <li>{children}</li>,
+  },
+};
+
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const post = await getPostBySlug(decodeURIComponent((await params).slug).trim());
   if (!post) notFound();
-  const [relatedPosts, relatedResources, nextPost] = await Promise.all([getRelatedPosts(post), getRelatedResources(post), getNextPost(post)]);
+
+  const [relatedPosts, relatedResources, nextPost] = await Promise.all([
+    getRelatedPosts(post),
+    getRelatedResources(post),
+    getNextPost(post),
+  ]);
+
   const breadcrumbJson = buildBreadcrumbJsonLd([
     { name: "Home", url: "https://omoseebivincent.site/" },
     { name: "Blog", url: "https://omoseebivincent.site/blog" },
@@ -35,45 +73,39 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         <article className="article">
           <p className="eyebrow">{post.topic}</p>
           <h1>{post.title}</h1>
-          <p className="meta">
-            By <Link href="/about">{post.author?.name ?? "Omoseebi Vincent"}</Link> · {post.date}
-          </p>
-          <p className="lead">{post.excerpt}</p>
-          <div className="article-body">
-            {"bodyBlocks" in post && post.bodyBlocks?.length ? <PortableTextBlocks blocks={post.bodyBlocks} /> : post.sections.map((section, index) => (
-              <section key={`${section.heading ?? "section"}-${index}`}>
-                {section.heading && <h2>{section.heading}</h2>}
-                {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-                {section.quote && <blockquote>{section.quote}</blockquote>}
-              </section>
-            ))}
+
+          <div className="article-meta" aria-label="Article information">
+            <span><strong>By</strong> {post.author?.name ?? "Omoseebi Vincent"}</span>
+            <span className="divider">·</span>
+            <span><strong>Published</strong> {post.date || "Recently published"}</span>
           </div>
-          <RelatedContent relatedPosts={relatedPosts} relatedResources={relatedResources} nextPost={await nextPost} />
+
+          <p className="lead">{post.excerpt}</p>
+
+          <div className="article-body">
+            {"bodyBlocks" in post && post.bodyBlocks?.length ? (
+              <PortableText value={post.bodyBlocks as never[]} components={portableTextComponents} />
+            ) : (
+              post.sections.map((section, index) => (
+                <section key={`${section.heading ?? "section"}-${index}`}>
+                  {section.heading && <h2>{section.heading}</h2>}
+                  {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+                  {section.quote && <blockquote>{section.quote}</blockquote>}
+                </section>
+              ))
+            )}
+          </div>
+
+          <RelatedContent relatedPosts={relatedPosts} relatedResources={relatedResources} nextPost={nextPost} />
         </article>
       </div>
     </>
   );
 }
 
-function PortableTextBlocks({ blocks }: { blocks: unknown[] }) {
-  return <>{blocks.map((block, index) => {
-    if (!isPortableTextBlock(block)) return null;
-    const text = block.children.map((child) => child.text).join("");
-    if (!text) return null;
-    if (block.style === "h2" || block.style === "h3") return block.style === "h2" ? <h2 key={index}>{text}</h2> : <h3 key={index}>{text}</h3>;
-    if (block.style === "blockquote") return <blockquote key={index}>{text}</blockquote>;
-    return <p key={index}>{text}</p>;
-  })}</>;
-}
-
-function isPortableTextBlock(value: unknown): value is { style?: string; children: { text: string }[] } {
-  if (!value || typeof value !== "object") return false;
-  const block = value as { children?: unknown };
-  return Array.isArray(block.children) && block.children.every((child) => Boolean(child) && typeof child === "object" && typeof (child as { text?: unknown }).text === "string");
-}
-
 function RelatedContent({ relatedPosts, relatedResources, nextPost }: { relatedPosts: Post[]; relatedResources: Resource[]; nextPost?: Post }) {
   if (!relatedPosts.length && !relatedResources.length && !nextPost) return null;
+
   return (
     <aside className="article-links">
       <div>
