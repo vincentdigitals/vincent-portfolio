@@ -9,15 +9,15 @@ export const sanityClient = sanityConfigured
   ? createClient({
       projectId: sanityProjectId!,
       dataset: sanityDataset,
-      apiVersion: "2025-01-01",
-      useCdn: true,
+      apiVersion: "2026-09-01",
+      useCdn: false,
     })
   : null;
 
 export async function sanityFetch<T>(query: string, params: Record<string, unknown> = {}) {
   if (!sanityClient) return null;
   try {
-    return await sanityClient.fetch<T>(query, params);
+    return await sanityClient.fetch<T>(query, params, { cache: "no-store" });
   } catch {
     return null;
   }

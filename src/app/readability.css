@@ -1,0 +1,107 @@
+:root {
+  --champagne: #fbfaf7;
+  --emerald: #0b5c46;
+  --ink: #171717;
+  --orange: #b45309;
+  --muted: #5f5f5f;
+  --soft: #dedfdc;
+  --white: #ffffff;
+  --green: #0b5c46;
+  --green-deep: #064e3b;
+  --green-soft: #f2f4ef;
+}
+
+html,
+body {
+  background: var(--champagne);
+  color: var(--ink);
+}
+
+.page-intro {
+  background: var(--green-soft);
+  border-bottom-color: var(--soft);
+}
+
+.page-intro h1,
+.article h1 {
+  color: var(--ink);
+}
+
+.page-intro p,
+.section-intro,
+.post p,
+.content-card p:not(.card-meta),
+.article .lead,
+.article-body {
+  color: #303030;
+}
+
+.post .tag,
+.content-card .card-meta,
+.eyebrow {
+  color: var(--orange);
+}
+
+.post .meta,
+.article .meta {
+  color: var(--muted);
+}
+
+.article .article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  align-items: center;
+  margin: 0 0 8px;
+  color: #4a4a4a;
+  font-family: "Courier New", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+
+.article .article-meta strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.article .article-meta .divider {
+  color: #9a9a9a;
+}
+
+.article-body a {
+  color: var(--emerald);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.article-body a:hover {
+  color: var(--orange);
+}
+
+.read-link {
+  display: inline-block;
+  margin-top: 24px;
+  color: var(--emerald);
+  font-family: "Courier New", monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.read-link:hover {
+  color: var(--orange);
+}
+
+.article-links a {
+  color: var(--emerald);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.article-links a:hover {
+  color: var(--orange);
+}
