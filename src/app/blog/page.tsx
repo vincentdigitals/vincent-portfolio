@@ -16,7 +16,7 @@ export default async function Blog() {
 
   return (
     <div className="page">
-      <section className="page-intro">
+      <section className="page-intro page-intro--brand">
         <p className="eyebrow">BLOG</p>
         <h1>Thinking about product and growth.</h1>
         <p>Practical writing on customers, product discovery, positioning, marketing, sales, and the decisions that shape early-stage growth.</p>

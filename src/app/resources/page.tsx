@@ -14,7 +14,7 @@ export default async function Resources() {
 
   return (
     <div className="page">
-      <section className="page-intro">
+      <section className="page-intro page-intro--brand">
         <p className="eyebrow">RESOURCES</p>
         <h1>Tools for better decisions.</h1>
         <p>Practical worksheets, checklists, and frameworks for customer research, validation, positioning, and product decisions.</p>
