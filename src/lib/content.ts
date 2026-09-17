@@ -112,7 +112,7 @@ function getDefaultAuthor(): Author {
 
 function mapSanityPost(post: SanityPost): Post & { bodyBlocks?: unknown[]; seoTitle?: string; seoDescription?: string } {
   const defaultAuthor = getDefaultAuthor();
-  const author = post.author ? { name: post.author.name ?? defaultAuthor.name, slug: post.author.slug, bio: post.author.bio, url: post.author.url ?? defaultAuthor.url, sameAs: post.author.sameAs?.length ? post.author.sameAs : defaultAuthor.sameAs } : defaultAuthor;
+  const author = post.author ? { name: post.author.name ?? defaultAuthor.name, slug: post.author.slug, bio: post.author.bio, url: post.author.url, sameAs: post.author.sameAs } : defaultAuthor;
 
   return {
     slug: post.slug,
