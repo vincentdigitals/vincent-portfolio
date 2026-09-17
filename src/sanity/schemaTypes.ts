@@ -41,7 +41,7 @@ export const post = defineType({
     defineField({ name: "relatedPosts", title: "Related posts", type: "array", of: [{ type: "reference", to: [{ type: "post" }] }] }),
     defineField({ name: "relatedResources", title: "Related resources", type: "array", of: [{ type: "reference", to: [{ type: "resource" }] }] }),
     defineField({ name: "nextPost", title: "Next post", type: "reference", to: [{ type: "post" }] }),
-    defineField({ name: "publishedAt", title: "Published at", type: "datetime" }),
+    defineField({ name: "publishedAt", title: "Published at", type: "datetime", validation: (rule) => rule.required() }),
     defineField({ name: "featured", title: "Featured", type: "boolean", initialValue: false }),
     defineField({ name: "seoTitle", title: "SEO title", type: "string" }),
     defineField({ name: "seoDescription", title: "SEO description", type: "text", rows: 2 }),

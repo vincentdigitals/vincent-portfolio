@@ -79,7 +79,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           <div className="article-meta" aria-label="Article information">
             <span><strong>By</strong> {post.author?.name ?? "Omoseebi Vincent"}</span>
             <span className="divider">·</span>
-            <span><strong>Published</strong> {post.date || "Recently published"}</span>
+            <span><strong>Published</strong> {post.publishedAt && post.date ? <time dateTime={post.publishedAt}>{post.date}</time> : "Recently published"}</span>
           </div>
 
           <p className="lead">{post.excerpt}</p>
