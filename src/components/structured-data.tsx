@@ -1,4 +1,5 @@
 import type { Author } from "@/lib/content";
+import { SITE_ORIGIN, normalizeSiteUrl } from "@/lib/site";
 
 export function JsonLd({ data }: { data: Record<string, unknown> }) {
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
@@ -17,8 +18,8 @@ export function buildProfilePageJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "ProfilePage",
-    url: "https://omoseebivincent.site/about",
-    mainEntity: buildPersonEntity("Omoseebi Vincent", "https://omoseebivincent.site/about", [
+    url: `${SITE_ORIGIN}/about`,
+    mainEntity: buildPersonEntity("Omoseebi Vincent", `${SITE_ORIGIN}/about`, [
       "https://www.linkedin.com/in/omoseebi-vincent/",
       "https://www.instagram.com/vincentomoseebi/",
       "https://www.youtube.com/@omoseebivincent_creates",
@@ -36,15 +37,15 @@ export function buildBlogPostingJsonLd(post: {
 }) {
   const author = post.author ?? {
     name: "Omoseebi Vincent",
-    url: "https://omoseebivincent.site/about",
+    url: `${SITE_ORIGIN}/about`,
     sameAs: [
       "https://www.linkedin.com/in/omoseebi-vincent/",
       "https://www.instagram.com/vincentomoseebi/",
       "https://www.youtube.com/@omoseebivincent_creates",
     ],
   };
-  const authorUrl = author.url || "https://omoseebivincent.site/about";
-  const canonicalUrl = `https://omoseebivincent.site/blog/${post.slug}`;
+  const authorUrl = normalizeSiteUrl(author.url) || `${SITE_ORIGIN}/about`;
+  const canonicalUrl = `${SITE_ORIGIN}/blog/${post.slug}`;
 
   return {
     "@context": "https://schema.org",

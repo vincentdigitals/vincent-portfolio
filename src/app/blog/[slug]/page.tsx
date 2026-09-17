@@ -3,6 +3,7 @@ import Link from "next/link";
 import { PortableText, type PortableTextComponents } from "@portabletext/react";
 import { buildBlogPostingJsonLd, buildBreadcrumbJsonLd, JsonLd } from "@/components/structured-data";
 import { getCmsSlugs, getNextPost, getPostBySlug, getRelatedPosts, getRelatedResources, type Post, type Resource } from "@/lib/content";
+import { SITE_ORIGIN } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
@@ -16,8 +17,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: post?.seoTitle || post?.title || "Blog post",
     description: post?.seoDescription || post?.excerpt,
-    alternates: { canonical: post ? `https://omoseebivincent.site/blog/${post.slug}` : "https://omoseebivincent.site/blog" },
-    openGraph: { url: post ? `https://omoseebivincent.site/blog/${post.slug}` : "https://omoseebivincent.site/blog", title: post?.title, description: post?.seoDescription || post?.excerpt, type: "article" },
+    alternates: { canonical: post ? `${SITE_ORIGIN}/blog/${post.slug}` : `${SITE_ORIGIN}/blog` },
+    openGraph: { url: post ? `${SITE_ORIGIN}/blog/${post.slug}` : `${SITE_ORIGIN}/blog`, title: post?.title, description: post?.seoDescription || post?.excerpt, type: "article" },
     twitter: { card: "summary", title: post?.title, description: post?.seoDescription || post?.excerpt },
   };
 }
@@ -61,9 +62,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   ]);
 
   const breadcrumbJson = buildBreadcrumbJsonLd([
-    { name: "Home", url: "https://omoseebivincent.site/" },
-    { name: "Blog", url: "https://omoseebivincent.site/blog" },
-    { name: post.title, url: `https://omoseebivincent.site/blog/${post.slug}` },
+    { name: "Home", url: `${SITE_ORIGIN}/` },
+    { name: "Blog", url: `${SITE_ORIGIN}/blog` },
+    { name: post.title, url: `${SITE_ORIGIN}/blog/${post.slug}` },
   ]);
 
   return (

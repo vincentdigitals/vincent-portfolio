@@ -54,6 +54,7 @@ export type Resource = {
 
 import { sanityFetch, sanityConfigured } from "@/sanity/client";
 import { postBySlugQuery, postsQuery, resourceBySlugQuery, resourcesQuery, resourceSlugsQuery, postSlugsQuery, topicTitlesQuery, topicBySlugQuery } from "@/sanity/queries";
+import { SITE_ORIGIN, normalizeSiteUrl } from "@/lib/site";
 
 type SanityAuthor = {
   name?: string;
@@ -101,7 +102,7 @@ function formatDate(date?: string) {
 function getDefaultAuthor(): Author {
   return {
     name: "Omoseebi Vincent",
-    url: "https://omoseebivincent.site/about",
+    url: `${SITE_ORIGIN}/about`,
     sameAs: [
       "https://www.linkedin.com/in/omoseebi-vincent/",
       "https://www.instagram.com/vincentomoseebi/",
@@ -112,7 +113,7 @@ function getDefaultAuthor(): Author {
 
 function mapSanityPost(post: SanityPost): Post & { bodyBlocks?: unknown[]; seoTitle?: string; seoDescription?: string } {
   const defaultAuthor = getDefaultAuthor();
-  const author = post.author ? { name: post.author.name ?? defaultAuthor.name, slug: post.author.slug, bio: post.author.bio, url: post.author.url, sameAs: post.author.sameAs } : defaultAuthor;
+  const author = post.author ? { name: post.author.name ?? defaultAuthor.name, slug: post.author.slug, bio: post.author.bio, url: normalizeSiteUrl(post.author.url), sameAs: post.author.sameAs } : defaultAuthor;
 
   return {
     slug: post.slug,

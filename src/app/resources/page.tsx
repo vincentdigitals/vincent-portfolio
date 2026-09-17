@@ -1,9 +1,12 @@
 import Link from "next/link";
 import { getAllResources } from "@/lib/content";
+import { SITE_ORIGIN } from "@/lib/site";
 
 export const metadata = {
   title: "Resources",
   description: "Practical resources for customer research, validation, positioning, and product decisions.",
+  alternates: { canonical: `${SITE_ORIGIN}/resources` },
+  openGraph: { url: `${SITE_ORIGIN}/resources`, title: "Resources", description: "Practical resources for customer research, validation, positioning, and product decisions.", type: "website" },
 };
 
 export default async function Resources() {

@@ -1,10 +1,11 @@
 import { JsonLd, buildProfilePageJsonLd } from "@/components/structured-data";
+import { SITE_ORIGIN } from "@/lib/site";
 
 export const metadata = {
   title: "About",
   description: "Omoseebi Vincent works across product discovery, customer research, positioning, marketing, sales, and product building.",
-  alternates: { canonical: "https://omoseebivincent.site/about" },
-  openGraph: { url: "https://omoseebivincent.site/about", title: "About Omoseebi Vincent", description: "Omoseebi Vincent works across product discovery, customer research, positioning, marketing, sales, and product building.", type: "profile" },
+  alternates: { canonical: `${SITE_ORIGIN}/about` },
+  openGraph: { url: `${SITE_ORIGIN}/about`, title: "About Omoseebi Vincent", description: "Omoseebi Vincent works across product discovery, customer research, positioning, marketing, sales, and product building.", type: "profile" },
   twitter: { card: "summary", title: "About Omoseebi Vincent", description: "Omoseebi Vincent works across product discovery, customer research, positioning, marketing, sales, and product building." },
 };
 

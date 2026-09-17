@@ -1,11 +1,17 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCmsTopicTitles, getPostsByTopic, getTopicBySlug, getTopicSlug } from "@/lib/content";
+import { SITE_ORIGIN } from "@/lib/site";
 
 export const revalidate = 60;
 
 export async function generateStaticParams() { return (await getCmsTopicTitles()).map((topic) => ({ slug: getTopicSlug(topic) })); }
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) { const topic = await getTopicBySlug((await params).slug); return { title: topic ?? "Topic" }; }
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const slug = (await params).slug;
+  const topic = await getTopicBySlug(slug);
+  const canonical = `${SITE_ORIGIN}/blog/topic/${slug}`;
+  return { title: topic ?? "Topic", alternates: { canonical }, openGraph: { url: canonical, title: topic ?? "Topic", type: "website" } };
+}
 
 export default async function TopicPage({ params }: { params: Promise<{ slug: string }> }) {
   const topic = await getTopicBySlug((await params).slug);

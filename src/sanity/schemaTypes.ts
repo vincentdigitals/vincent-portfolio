@@ -9,7 +9,7 @@ export const author = defineType({
     defineField({ name: "slug", title: "Slug", type: "slug", initialValue: { current: "omoseebi-vincent" }, options: { source: "name", maxLength: 96 }, validation: (rule) => rule.required() }),
     defineField({ name: "bio", title: "Bio", type: "text", rows: 4 }),
     defineField({ name: "image", title: "Image", type: "image", options: { hotspot: true } }),
-    defineField({ name: "url", title: "Profile URL", type: "url", initialValue: "https://omoseebivincent.site/about" }),
+    defineField({ name: "url", title: "Profile URL", type: "url", initialValue: "https://www.omoseebivincent.site/about" }),
     defineField({
       name: "sameAs",
       title: "Social profiles",
