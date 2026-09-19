@@ -65,6 +65,19 @@ main { width:100%; }
 .article { max-width:760px; margin:75px auto; padding:0 24px; } .article h1 { color:var(--green-deep); font:normal clamp(3rem,7vw,5.8rem)/.94 Georgia,serif; margin:18px 0 25px; letter-spacing:-.025em; }
 .article .lead { font-size:1.25rem; color:#57544e; max-width:700px; } .article-body { margin-top:50px; padding-top:35px; border-top:3px solid var(--emerald); font-family:Georgia,serif; font-size:1.15rem; }
 .article-body h2 { font:normal 2rem Georgia,serif; margin-top:45px; } .article-body p { margin:0 0 24px; } .article-body blockquote { border-left:3px solid var(--orange); padding-left:20px; margin:38px 0; font-style:italic; }
+
+.article-toc { margin-top:48px; padding:24px 28px; border:1px solid var(--soft); background:rgba(226,240,217,.42); }
+.article-toc .eyebrow { margin:0 0 16px; color:var(--emerald); }
+.article-toc ol { margin:0; padding:0; list-style:none; counter-reset:toc; }
+.article-toc li { counter-increment:toc; margin:0; }
+.article-toc li a { display:block; padding:6px 0; font-family:"Courier New",monospace; font-size:.72rem; line-height:1.45; color:var(--emerald); }
+.article-toc li a::before { content:counter(toc, decimal-leading-zero) "  "; color:var(--orange); }
+.article-toc li a:hover { color:var(--orange); }
+.article-toc .toc-subitem { padding-left:22px; }
+.article-toc .toc-subitem a { font-family:"Trebuchet MS",sans-serif; font-size:.88rem; color:#57544e; }
+.article-body h2, .article-body h3 { scroll-margin-top:24px; }
+.article-body h3 { font:normal 1.45rem/1.15 Georgia,serif; margin-top:34px; }
+
 .article-links { display:flex; justify-content:space-between; gap:50px; margin-top:80px; padding-top:10px; font-family:Georgia,serif; } .article-links > div { display:flex; flex-direction:column; align-items:flex-start; gap:7px; } .article-links a { font-size:1.1rem; }
 .article-links .eyebrow { margin:0 0 8px; } .resource-file-note { margin-top:45px; padding:24px 0; border-top:1px solid var(--soft); border-bottom:1px solid var(--soft); } .resource-file-note .meta { color:var(--emerald); }
 .resource-file-note p { margin:8px 0 0; font-family:"Trebuchet MS",sans-serif; font-size:.9rem; color:var(--muted); }
