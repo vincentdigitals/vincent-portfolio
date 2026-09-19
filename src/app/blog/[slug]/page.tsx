@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import ArticleTableOfContents, { type TableOfContentsItem } from "@/components/article-table-of-contents";
 import { PortableText, type PortableTextComponents } from "@portabletext/react";
 import { buildBlogPostingJsonLd, buildBreadcrumbJsonLd, JsonLd } from "@/components/structured-data";
 import { getCmsSlugs, getNextPost, getPostBySlug, getRelatedPosts, getRelatedResources, type Post, type Resource } from "@/lib/content";
@@ -48,12 +49,12 @@ function headingId(block: HeadingBlock, index = 0) {
   return `heading-${block._key || slugifyHeading(headingText(block)) || `section-${index + 1}`}`;
 }
 
-function buildTableOfContents(blocks: HeadingBlock[]) {
+function buildTableOfContents(blocks: HeadingBlock[]): TableOfContentsItem[] {
   return blocks
-    .filter((block) => block.style === "h2" || block.style === "h3")
+    .filter((block) => block.style === "h2")
     .map((block, index) => {
       const text = headingText(block);
-      return { id: headingId(block, index), text, level: block.style === "h3" ? 3 : 2, key: block._key ?? `${headingId(block, index)}-${index}` };
+      return { id: headingId(block, index), text, key: block._key ?? `${headingId(block, index)}-${index}` };
     })
     .filter((heading) => heading.text);
 }
@@ -107,6 +108,13 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       <JsonLd data={buildBlogPostingJsonLd({ title: post.title, excerpt: post.excerpt, slug: post.slug, publishedAt: post.publishedAt, modifiedAt: post.modifiedAt, author: post.author })} />
       <JsonLd data={breadcrumbJson} />
       <div className="page">
+        <div className="article-layout">
+          <aside className="article-toc-column">
+            {"bodyBlocks" in post && post.bodyBlocks?.length ? (() => {
+              const tableOfContents = buildTableOfContents(post.bodyBlocks as HeadingBlock[]);
+              return tableOfContents.length ? <ArticleTableOfContents items={tableOfContents} /> : null;
+            })() : null}
+          </aside>
         <article className="article">
           <p className="eyebrow">{post.topic}</p>
           <h1>{post.title}</h1>
@@ -118,23 +126,6 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           </div>
 
           <p className="lead">{post.excerpt}</p>
-
-          {"bodyBlocks" in post && post.bodyBlocks?.length && (() => {
-            const tableOfContents = buildTableOfContents(post.bodyBlocks as HeadingBlock[]);
-            if (!tableOfContents.length) return null;
-            return (
-              <nav className="article-toc" aria-label="Table of contents">
-                <p className="eyebrow">Table of contents</p>
-                <ol>
-                  {tableOfContents.map((heading) => (
-                    <li key={heading.key} className={heading.level === 3 ? "toc-subitem" : undefined}>
-                      <a href={`#${heading.id}`}>{heading.text}</a>
-                    </li>
-                  ))}
-                </ol>
-              </nav>
-            );
-          })()}
 
           <div className="article-body">
             {"bodyBlocks" in post && post.bodyBlocks?.length ? (
@@ -152,6 +143,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
           <RelatedContent relatedPosts={relatedPosts} relatedResources={relatedResources} nextPost={nextPost} />
         </article>
+        </div>
       </div>
     </>
   );
