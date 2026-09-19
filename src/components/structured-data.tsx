@@ -5,11 +5,12 @@ export function JsonLd({ data }: { data: Record<string, unknown> }) {
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
 }
 
-export function buildPersonEntity(name: string, url: string, sameAs?: string[]) {
+export function buildPersonEntity(name: string, url: string, sameAs?: string[], image?: string) {
   return {
     "@type": "Person",
     name,
     url,
+    ...(image ? { image } : {}),
     ...(sameAs && sameAs.length > 0 ? { sameAs } : {}),
   };
 }
@@ -23,7 +24,7 @@ export function buildProfilePageJsonLd() {
       "https://www.linkedin.com/in/omoseebi-vincent/",
       "https://www.instagram.com/vincentomoseebi/",
       "https://www.youtube.com/@omoseebivincent_creates",
-    ]),
+    ], `${SITE_ORIGIN}/profile.jpg`),
   };
 }
 
@@ -38,6 +39,7 @@ export function buildBlogPostingJsonLd(post: {
   const author = post.author ?? {
     name: "Omoseebi Vincent",
     url: `${SITE_ORIGIN}/about`,
+    image: `${SITE_ORIGIN}/profile.jpg`,
     sameAs: [
       "https://www.linkedin.com/in/omoseebi-vincent/",
       "https://www.instagram.com/vincentomoseebi/",
@@ -56,7 +58,7 @@ export function buildBlogPostingJsonLd(post: {
     mainEntityOfPage: canonicalUrl,
     ...(post.publishedAt ? { datePublished: post.publishedAt } : {}),
     ...(post.modifiedAt ? { dateModified: post.modifiedAt } : {}),
-    author: buildPersonEntity(author.name, authorUrl, author.sameAs),
+    author: buildPersonEntity(author.name, authorUrl, author.sameAs, author.image),
     publisher: buildPersonEntity(author.name, authorUrl),
   };
 }

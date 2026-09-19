@@ -60,6 +60,7 @@ type SanityAuthor = {
   name?: string;
   slug?: string;
   bio?: string;
+  image?: { asset?: { url?: string } };
   url?: string;
   sameAs?: string[];
 };
@@ -106,6 +107,7 @@ function getDefaultAuthor(): Author {
   return {
     name: "Omoseebi Vincent",
     url: `${SITE_ORIGIN}/about`,
+    image: `${SITE_ORIGIN}/profile.jpg`,
     sameAs: [
       "https://www.linkedin.com/in/omoseebi-vincent/",
       "https://www.instagram.com/vincentomoseebi/",
@@ -116,7 +118,16 @@ function getDefaultAuthor(): Author {
 
 function mapSanityPost(post: SanityPost): Post & { bodyBlocks?: unknown[]; seoTitle?: string; seoDescription?: string } {
   const defaultAuthor = getDefaultAuthor();
-  const author = post.author ? { name: post.author.name ?? defaultAuthor.name, slug: post.author.slug, bio: post.author.bio, url: normalizeSiteUrl(post.author.url), sameAs: post.author.sameAs } : defaultAuthor;
+  const authorName = post.author?.name ?? defaultAuthor.name;
+  const isVincent = authorName === defaultAuthor.name;
+  const author = post.author ? {
+    name: authorName,
+    slug: post.author.slug,
+    bio: post.author.bio,
+    url: normalizeSiteUrl(post.author.url) || (isVincent ? defaultAuthor.url : undefined),
+    sameAs: post.author.sameAs?.length ? post.author.sameAs : (isVincent ? defaultAuthor.sameAs : undefined),
+    image: post.author.image?.asset?.url || (isVincent ? defaultAuthor.image : undefined),
+  } : defaultAuthor;
 
   return {
     slug: post.slug,
