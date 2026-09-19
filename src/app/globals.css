@@ -211,3 +211,89 @@ main { width:100%; }
   text-transform:uppercase;
   letter-spacing:.05em;
 }
+
+
+/* About layout responsive rules */
+@media (max-width: 900px) {
+  .about-layout {
+    display:block;
+    padding:0 5vw;
+  }
+
+  .about-header {
+    padding:64px 0 58px;
+  }
+
+  .about-profile {
+    grid-template-columns:120px minmax(0,1fr);
+    column-gap:28px;
+  }
+
+  .about-profile > div:last-child {
+    grid-column:2;
+  }
+
+  .about-profile-image {
+    width:120px;
+    height:120px;
+  }
+
+  .about-layout > .article {
+    width:100%;
+    max-width:760px;
+    margin:60px auto 80px;
+    padding:0;
+  }
+}
+
+@media (max-width:700px) {
+  .about-layout {
+    display:block;
+    padding:0 6vw;
+  }
+
+  .about-header {
+    padding:52px 0 48px;
+  }
+
+  .about-profile {
+    display:block;
+  }
+
+  .about-profile-image {
+    display:none;
+  }
+
+  .about-profile > div:last-child {
+    width:100%;
+  }
+
+  .about-profile h1 {
+    font-size:clamp(3rem,15vw,4.15rem);
+    line-height:.92;
+    margin:0 0 18px;
+    max-width:100%;
+  }
+
+  .about-profile .section-intro {
+    font-size:1rem;
+    line-height:1.65;
+    margin-bottom:24px;
+    max-width:32rem;
+  }
+
+  .about-socials {
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:13px;
+    font-size:.68rem;
+  }
+
+  .about-layout > .article {
+    width:100%;
+    max-width:760px;
+    margin:48px auto 64px;
+    padding:0;
+  }
+}
