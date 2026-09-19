@@ -53,7 +53,7 @@ export type Resource = {
 };
 
 import { sanityFetch, sanityConfigured } from "@/sanity/client";
-import { postBySlugQuery, postsQuery, resourceBySlugQuery, resourcesQuery, resourceSlugsQuery, postSlugsQuery, topicTitlesQuery, topicBySlugQuery } from "@/sanity/queries";
+import { postBySlugQuery, postsCountQuery, postsPageQuery, postsQuery, resourceBySlugQuery, resourcesQuery, resourceSlugsQuery, postSlugsQuery, topicTitlesQuery, topicBySlugQuery } from "@/sanity/queries";
 import { SITE_ORIGIN, normalizeSiteUrl } from "@/lib/site";
 
 type SanityAuthor = {
@@ -175,6 +175,18 @@ export async function getAllPosts(): Promise<Post[]> {
   if (!sanityConfigured) return posts;
   const result = await sanityFetch<SanityPost[]>(postsQuery);
   return result?.map(mapSanityPost) ?? posts;
+}
+
+export async function getPostsPage(page: number, pageSize: number): Promise<{ posts: Post[]; total: number }> {
+  const start = (page - 1) * pageSize;
+  const end = start + pageSize;
+  if (!sanityConfigured) return { posts: posts.slice(start, end), total: posts.length };
+  const [result, total] = await Promise.all([
+    sanityFetch<SanityPost[]>(postsPageQuery, { start, end }),
+    sanityFetch<number>(postsCountQuery),
+  ]);
+  if (!result || total === null) return { posts: posts.slice(start, end), total: posts.length };
+  return { posts: result?.map(mapSanityPost) ?? [], total: total ?? 0 };
 }
 
 export async function getPostBySlug(slug: string): Promise<Post | undefined> {

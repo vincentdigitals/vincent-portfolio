@@ -15,6 +15,20 @@ export const postsQuery = `*[_type == "post" && defined(slug.current) && (!defin
   seoDescription
 }`;
 
+export const postsPageQuery = `*[_type == "post" && defined(slug.current) && (!defined(publishedAt) || publishedAt <= now())] | order(publishedAt desc) [$start...$end] {
+  "slug": slug.current,
+  title,
+  excerpt,
+  "topic": topic->title,
+  publishedAt,
+  "modifiedAt": _updatedAt,
+  featured,
+  seoTitle,
+  seoDescription
+}`;
+
+export const postsCountQuery = `count(*[_type == "post" && defined(slug.current) && (!defined(publishedAt) || publishedAt <= now())])`;
+
 export const postBySlugQuery = `*[_type == "post" && slug.current == $slug && (!defined(publishedAt) || publishedAt <= now())][0] {
   "slug": slug.current,
   title,
