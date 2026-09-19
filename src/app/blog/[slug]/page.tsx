@@ -24,6 +24,18 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 const portableTextComponents: PortableTextComponents = {
+  types: {
+    image: ({ value }) => {
+      const image = value as { assetUrl?: string; alt?: string; caption?: string };
+      if (!image.assetUrl) return null;
+      return (
+        <figure className="article-image">
+          <img src={image.assetUrl} alt={image.alt ?? ""} />
+          {image.caption && <figcaption>{image.caption}</figcaption>}
+        </figure>
+      );
+    },
+  },
   block: {
     h2: ({ children }) => <h2>{children}</h2>,
     h3: ({ children }) => <h3>{children}</h3>,

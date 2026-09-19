@@ -1,5 +1,7 @@
 import { JsonLd, buildProfilePageJsonLd } from "@/components/structured-data";
 import { SITE_ORIGIN } from "@/lib/site";
+import Image from "next/image";
+import Link from "next/link";
 
 export const metadata = {
   title: "About",
@@ -13,27 +15,82 @@ export default function About() {
   return (
     <>
       <JsonLd data={buildProfilePageJsonLd()} />
-      <div className="page">
-        <section className="page-intro">
-          <p className="eyebrow">ABOUT ME</p>
-          <h1>Product, customers, and growth.</h1>
-          <p>I work with early-stage founders on the questions that sit between building a product and growing a business.</p>
+      <div className="about-page">
+        <section className="about-hero">
+          <div className="about-hero-copy">
+            <p className="eyebrow">ABOUT ME</p>
+            <p className="about-name">Omoseebi Vincent</p>
+            <h1>I help early-stage founders figure out what&apos;s holding their growth back.</h1>
+            <div className="about-hero-copy-text">
+              <p>I&apos;m interested in why some businesses grow and others don&apos;t.</p>
+              <p>A founder can have a good product and still struggle to get customers.</p>
+              <p>They can have customers and still struggle to keep them.</p>
+              <p>They can spend more on marketing and still not see much change.</p>
+              <p>When that happens, I like to look at what&apos;s actually going on.</p>
+              <p>It could be the product. It could be the customer. It could be the way the business is positioned. It could be marketing, sales, retention, or something else entirely.</p>
+              <p>The important part is finding the thing that&apos;s actually getting in the way.</p>
+            </div>
+            <div className="about-actions">
+              <Link className="about-button about-button--dark" href="/blog">Read the blog <span aria-hidden="true">↗</span></Link>
+              <a className="about-text-link" href="https://www.linkedin.com/in/omoseebi-vincent/" target="_blank" rel="noreferrer">Connect with me on LinkedIn <span aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+          <div className="about-portrait">
+            <Image src="/profile.jpg" alt="Omoseebi Vincent" width={420} height={520} priority />
+            <p>Product, customers, and growth.</p>
+          </div>
         </section>
 
-        <article className="article">
-          <div className="article-body">
-            <p>I&apos;m Omoseebi Vincent.</p>
-            <p>I help founders understand what is getting in the way of growth — whether the issue is the product, the customer, the positioning, the message, marketing, sales, or something else.</p>
-            <p>My work spans product discovery, customer research, validation, positioning, marketing, sales, and product building.</p>
-            <p>I don&apos;t believe every growth problem needs another feature, another campaign, or another channel. Sometimes the right move is to build. Sometimes it is to talk to customers, change the message, test an assumption, or stop doing something that is not working.</p>
-            <p>The job is to understand the situation well enough to know which one.</p>
-
-            <h2>How I work</h2>
-            <blockquote>Understand first.<br />Validate second.<br />Build third.</blockquote>
-
-            <p>That principle shapes how I approach products and growth: start with the problem, look for evidence, make the decision, then act.</p>
+        <section className="about-section about-section--building">
+          <div className="about-section-content">
+            <p className="eyebrow">01 / THE FULL LOOP</p>
+            <h2>I like building things.</h2>
+            <p>My background is in software development, so I enjoy taking an idea and turning it into something people can use.</p>
+            <p>But I also enjoy everything around the building.</p>
+            <p>Before something is built, there are questions about the problem, the people who have it, and whether the idea makes sense in the first place.</p>
+            <p>After it&apos;s built, things get even more interesting.</p>
+            <p>You get to see what people actually do.</p>
+            <p>What they use.</p>
+            <p>What they don&apos;t.</p>
+            <p>What they struggle with.</p>
+            <p>What brings them back.</p>
+            <p>And what makes them leave.</p>
+            <p>That&apos;s often where you learn whether the thing you built is actually doing what you thought it would.</p>
           </div>
-        </article>
+          <div className="about-loop-visual" aria-label="The relationship between thinking, building, and observing">
+            <div className="about-loop-line"><span>01</span><strong>Think</strong><small>Ask better questions</small></div>
+            <div className="about-loop-line"><span>02</span><strong>Build</strong><small>Make the idea real</small></div>
+            <div className="about-loop-line"><span>03</span><strong>Observe</strong><small>See what people do</small></div>
+            <p>Then go back and learn.</p>
+          </div>
+        </section>
+
+        <section className="about-section about-section--topics">
+          <div className="about-section-heading">
+            <p className="eyebrow">02 / THE QUESTIONS</p>
+            <h2>What I spend my time thinking about</h2>
+          </div>
+          <div className="about-topics-list" aria-label="Areas of interest">
+            <span>Product.</span><span>Customers.</span><span>Positioning.</span><span>Marketing.</span><span>Sales.</span><span>Retention.</span><span>Growth.</span>
+          </div>
+          <div className="about-topics-copy">
+            <p>Not as separate topics, but as parts of the same business.</p>
+            <p>Because when something isn&apos;t growing, adding more features or doing more marketing isn&apos;t always the answer.</p>
+            <p>Sometimes you need to step back and figure out what&apos;s actually wrong.</p>
+            <p>That&apos;s the kind of problem I enjoy working through.</p>
+          </div>
+        </section>
+
+        <section className="about-cta">
+          <p className="eyebrow">FOR FOUNDERS</p>
+          <h2>If you&apos;re building something</h2>
+          <p>If you&apos;re an early-stage founder trying to figure out what&apos;s not working, what to focus on, or what to do next, you can follow my work here.</p>
+          <p>I share what I&apos;m finding through my writing, research, and conversations with founders.</p>
+          <div className="about-actions">
+            <Link className="about-button about-button--light" href="/blog">Read my blog <span aria-hidden="true">↗</span></Link>
+            <a className="about-button about-button--outline" href="https://www.linkedin.com/in/omoseebi-vincent/" target="_blank" rel="noreferrer">Connect with me on LinkedIn <span aria-hidden="true">↗</span></a>
+          </div>
+        </section>
       </div>
     </>
   );
