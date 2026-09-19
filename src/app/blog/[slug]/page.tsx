@@ -44,24 +44,23 @@ function slugifyHeading(text: string) {
     .replace(/-+/g, "-");
 }
 
+function headingId(block: HeadingBlock, index = 0) {
+  return `heading-${block._key || slugifyHeading(headingText(block)) || `section-${index + 1}`}`;
+}
+
 function buildTableOfContents(blocks: HeadingBlock[]) {
-  const used = new Map<string, number>();
   return blocks
     .filter((block) => block.style === "h2" || block.style === "h3")
     .map((block, index) => {
       const text = headingText(block);
-      const base = slugifyHeading(text) || `section-${index + 1}`;
-      const count = used.get(base) ?? 0;
-      used.set(base, count + 1);
-      const id = count ? `${base}-${count + 1}` : base;
-      return { id, text, level: block.style === "h3" ? 3 : 2, key: block._key ?? `${id}-${index}` };
+      return { id: headingId(block, index), text, level: block.style === "h3" ? 3 : 2, key: block._key ?? `${headingId(block, index)}-${index}` };
     })
     .filter((heading) => heading.text);
 }
 
 const portableTextComponents: PortableTextComponents = {
   block: {
-    h2: ({ children, value }) => <h2 id={slugifyHeading(headingText(value as HeadingBlock)) || undefined}>{children}</h2>,
+    h2: ({ children, value }) => <h2 id={headingId(value as HeadingBlock)}>{children}</h2>,
     h3: ({ children, value }) => <h3 id={slugifyHeading(headingText(value as HeadingBlock)) || undefined}>{children}</h3>,
     blockquote: ({ children }) => <blockquote>{children}</blockquote>,
   },
