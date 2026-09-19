@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import ArticleTableOfContents, { type TableOfContentsItem } from "@/components/article-table-of-contents";
 import { PortableText, type PortableTextComponents } from "@portabletext/react";
 import { buildBlogPostingJsonLd, buildBreadcrumbJsonLd, JsonLd } from "@/components/structured-data";
 import { getCmsSlugs, getNextPost, getPostBySlug, getRelatedPosts, getRelatedResources, type Post, type Resource } from "@/lib/content";
@@ -23,6 +24,41 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
+type HeadingBlock = {
+  _key?: string;
+  style?: string;
+  children?: Array<{ text?: string }>;
+};
+
+function headingText(block: HeadingBlock) {
+  return (block.children ?? []).map((child) => child.text ?? "").join("").trim();
+}
+
+function slugifyHeading(text: string) {
+  return text
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\\u0300-\\u036f]/g, "")
+    .replace(/[^a-z0-9\\s-]/g, "")
+    .trim()
+    .replace(/\\s+/g, "-")
+    .replace(/-+/g, "-");
+}
+
+function headingId(block: HeadingBlock, index = 0) {
+  return `heading-${block._key || slugifyHeading(headingText(block)) || `section-${index + 1}`}`;
+}
+
+function buildTableOfContents(blocks: HeadingBlock[]): TableOfContentsItem[] {
+  return blocks
+    .filter((block) => block.style === "h2")
+    .map((block, index) => {
+      const text = headingText(block);
+      return { id: headingId(block, index), text, key: block._key ?? `${headingId(block, index)}-${index}` };
+    })
+    .filter((heading) => heading.text);
+}
+
 const portableTextComponents: PortableTextComponents = {
   types: {
     image: ({ value }) => {
@@ -37,8 +73,8 @@ const portableTextComponents: PortableTextComponents = {
     },
   },
   block: {
-    h2: ({ children }) => <h2>{children}</h2>,
-    h3: ({ children }) => <h3>{children}</h3>,
+    h2: ({ children, value }) => <h2 id={headingId(value as HeadingBlock)}>{children}</h2>,
+    h3: ({ children, value }) => <h3 id={slugifyHeading(headingText(value as HeadingBlock)) || undefined}>{children}</h3>,
     blockquote: ({ children }) => <blockquote>{children}</blockquote>,
   },
   marks: {
@@ -84,6 +120,13 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       <JsonLd data={buildBlogPostingJsonLd({ title: post.title, excerpt: post.excerpt, slug: post.slug, publishedAt: post.publishedAt, modifiedAt: post.modifiedAt, author: post.author })} />
       <JsonLd data={breadcrumbJson} />
       <div className="page">
+        <div className="article-layout">
+          <aside className="article-toc-column">
+            {"bodyBlocks" in post && post.bodyBlocks?.length ? (() => {
+              const tableOfContents = buildTableOfContents(post.bodyBlocks as HeadingBlock[]);
+              return tableOfContents.length ? <ArticleTableOfContents items={tableOfContents} /> : null;
+            })() : null}
+          </aside>
         <article className="article">
           <p className="eyebrow">{post.topic}</p>
           <h1>{post.title}</h1>
@@ -112,6 +155,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
           <RelatedContent relatedPosts={relatedPosts} relatedResources={relatedResources} nextPost={nextPost} />
         </article>
+        </div>
       </div>
     </>
   );

@@ -16,10 +16,10 @@ export default async function Blog() {
 
   return (
     <div className="page">
-      <section className="page-intro page-intro--brand">
+      <section className="section blog-intro">
         <p className="eyebrow">BLOG</p>
         <h1>Thinking about product and growth.</h1>
-        <p>Practical writing on customers, product discovery, positioning, marketing, sales, and the decisions that shape early-stage growth.</p>
+        <p className="section-intro">Practical writing on customers, product discovery, positioning, marketing, sales, and the decisions that shape early-stage growth.</p>
       </section>
       <section className="section">
         <div className="listing">
