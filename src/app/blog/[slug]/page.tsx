@@ -60,6 +60,17 @@ function buildTableOfContents(blocks: HeadingBlock[]): TableOfContentsItem[] {
 }
 
 const portableTextComponents: PortableTextComponents = {
+  types: {
+    image: ({ value }) => {
+      if (!value?.imageUrl) return null;
+      return (
+        <figure>
+          <img className="article-image" src={value.imageUrl} alt={value.alt || ""} loading="lazy" />
+          {value.caption ? <figcaption className="article-image-caption">{value.caption}</figcaption> : null}
+        </figure>
+      );
+    },
+  },
   block: {
     h2: ({ children, value }) => <h2 id={headingId(value as HeadingBlock)}>{children}</h2>,
     h3: ({ children, value }) => <h3 id={slugifyHeading(headingText(value as HeadingBlock)) || undefined}>{children}</h3>,
