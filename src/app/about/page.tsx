@@ -16,7 +16,8 @@ export default function About() {
     <>
       <JsonLd data={buildProfilePageJsonLd()} />
       <div className="page">
-        <section className="section about-header">
+        <div className="about-layout">
+        <section className="about-header">
           <div className="about-profile">
             <Image className="about-profile-image" src="/profile.jpg" alt="Omoseebi Vincent" width={140} height={140} priority />
             <div>
@@ -57,6 +58,7 @@ export default function About() {
             </div>
           </div>
         </article>
+        </div>
       </div>
     </>
   );
