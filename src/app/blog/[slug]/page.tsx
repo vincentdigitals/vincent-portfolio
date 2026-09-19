@@ -23,10 +23,46 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
+type HeadingBlock = {
+  _key?: string;
+  style?: string;
+  children?: Array<{ text?: string }>;
+};
+
+function headingText(block: HeadingBlock) {
+  return (block.children ?? []).map((child) => child.text ?? "").join("").trim();
+}
+
+function slugifyHeading(text: string) {
+  return text
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\\u0300-\\u036f]/g, "")
+    .replace(/[^a-z0-9\\s-]/g, "")
+    .trim()
+    .replace(/\\s+/g, "-")
+    .replace(/-+/g, "-");
+}
+
+function buildTableOfContents(blocks: HeadingBlock[]) {
+  const used = new Map<string, number>();
+  return blocks
+    .filter((block) => block.style === "h2" || block.style === "h3")
+    .map((block, index) => {
+      const text = headingText(block);
+      const base = slugifyHeading(text) || `section-${index + 1}`;
+      const count = used.get(base) ?? 0;
+      used.set(base, count + 1);
+      const id = count ? `${base}-${count + 1}` : base;
+      return { id, text, level: block.style === "h3" ? 3 : 2, key: block._key ?? `${id}-${index}` };
+    })
+    .filter((heading) => heading.text);
+}
+
 const portableTextComponents: PortableTextComponents = {
   block: {
-    h2: ({ children }) => <h2>{children}</h2>,
-    h3: ({ children }) => <h3>{children}</h3>,
+    h2: ({ children, value }) => <h2 id={slugifyHeading(headingText(value as HeadingBlock)) || undefined}>{children}</h2>,
+    h3: ({ children, value }) => <h3 id={slugifyHeading(headingText(value as HeadingBlock)) || undefined}>{children}</h3>,
     blockquote: ({ children }) => <blockquote>{children}</blockquote>,
   },
   marks: {
@@ -83,6 +119,23 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           </div>
 
           <p className="lead">{post.excerpt}</p>
+
+          {"bodyBlocks" in post && post.bodyBlocks?.length && (() => {
+            const tableOfContents = buildTableOfContents(post.bodyBlocks as HeadingBlock[]);
+            if (!tableOfContents.length) return null;
+            return (
+              <nav className="article-toc" aria-label="Table of contents">
+                <p className="eyebrow">Table of contents</p>
+                <ol>
+                  {tableOfContents.map((heading) => (
+                    <li key={heading.key} className={heading.level === 3 ? "toc-subitem" : undefined}>
+                      <a href={`#${heading.id}`}>{heading.text}</a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            );
+          })()}
 
           <div className="article-body">
             {"bodyBlocks" in post && post.bodyBlocks?.length ? (
