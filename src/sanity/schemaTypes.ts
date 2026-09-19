@@ -40,7 +40,21 @@ export const post = defineType({
       title: "Body",
       type: "array",
       of: [
-        { type: "block" },
+        {
+          type: "block",
+          marks: {
+            annotations: [
+              {
+                name: "link",
+                title: "Link",
+                type: "object",
+                fields: [
+                  defineField({ name: "href", title: "URL", type: "url", validation: (rule) => rule.required() }),
+                ],
+              },
+            ],
+          },
+        },
         {
           type: "image",
           title: "Image",
