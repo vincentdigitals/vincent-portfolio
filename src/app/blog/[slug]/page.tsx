@@ -121,25 +121,32 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       <JsonLd data={breadcrumbJson} />
       <div className="page">
         <div className="article-layout">
-          <aside className="article-toc-column">
+          <aside className="article-toc-column article-toc-column-desktop">
             {"bodyBlocks" in post && post.bodyBlocks?.length ? (() => {
               const tableOfContents = buildTableOfContents(post.bodyBlocks as HeadingBlock[]);
               return tableOfContents.length ? <ArticleTableOfContents items={tableOfContents} /> : null;
             })() : null}
           </aside>
-        <article className="article">
-          <p className="eyebrow">{post.topic}</p>
-          <h1>{post.title}</h1>
+          <article className="article">
+            <p className="eyebrow">{post.topic}</p>
+            <h1>{post.title}</h1>
 
-          <div className="article-meta" aria-label="Article information">
-            <span><strong>By</strong> {post.author?.name ?? "Omoseebi Vincent"}</span>
-            <span className="divider">·</span>
-            <span><strong>Published</strong> {post.publishedAt && post.date ? <time dateTime={post.publishedAt}>{post.date}</time> : "Recently published"}</span>
-          </div>
+            <div className="article-meta" aria-label="Article information">
+              <span><strong>By</strong> {post.author?.name ?? "Omoseebi Vincent"}</span>
+              <span className="divider">·</span>
+              <span><strong>Published</strong> {post.publishedAt && post.date ? <time dateTime={post.publishedAt}>{post.date}</time> : "Recently published"}</span>
+            </div>
 
-          <p className="lead">{post.excerpt}</p>
+            <p className="lead">{post.excerpt}</p>
 
-          <div className="article-body">
+            <div className="article-toc-mobile">
+              {"bodyBlocks" in post && post.bodyBlocks?.length ? (() => {
+                const tableOfContents = buildTableOfContents(post.bodyBlocks as HeadingBlock[]);
+                return tableOfContents.length ? <ArticleTableOfContents items={tableOfContents} /> : null;
+              })() : null}
+            </div>
+
+            <div className="article-body">
             {"bodyBlocks" in post && post.bodyBlocks?.length ? (
               <PortableText value={post.bodyBlocks as never[]} components={portableTextComponents} />
             ) : (
