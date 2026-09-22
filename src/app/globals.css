@@ -186,8 +186,8 @@ main { width:100%; }
 
 .blog-intro { padding-top:72px; padding-bottom:54px; }
 .blog-intro h1 { font:normal clamp(2.8rem,6vw,5.4rem)/.95 Georgia,serif; margin:12px 0 18px; max-width:760px; color:var(--green-deep); letter-spacing:-.025em; }
-.article-layout { width:100%; max-width:1280px; margin:0 auto; padding:0 5vw; display:grid; grid-template-columns:minmax(220px,240px) minmax(0,760px) minmax(40px,1fr); gap:42px; align-items:start; }
-.article { max-width:760px; margin:75px 0; padding:0; min-width:0; }
+.article-layout { width:100%; max-width:1280px; margin:0 auto; padding:0 5vw; }
+.article { width:100%; max-width:900px; margin:75px auto; padding:0; min-width:0; }
 .article-toc-column { min-width:0; padding-top:118px; }
 .article-toc-column-desktop { display:block; }
 .article-toc-mobile { display:none; }
