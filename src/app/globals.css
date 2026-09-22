@@ -69,7 +69,9 @@ main { width:100%; }
 .page-intro { width:100%; max-width:1280px; margin:0 auto; padding:80px 5vw 55px; background:var(--green-soft); border-bottom:1px solid rgba(6,78,59,.16); }
 .page-intro h1 { font:normal clamp(3rem,7vw,6.5rem)/.94 Georgia,serif; margin:15px 0; max-width:760px; color:var(--green-deep); } .page-intro p { max-width:540px; font-size:1.1rem; color:#57544e; }
 .article { max-width:760px; margin:75px auto; padding:0 24px; } .article h1 { color:var(--green-deep); font:normal clamp(3rem,7vw,5.8rem)/.94 Georgia,serif; margin:18px 0 25px; letter-spacing:-.025em; }
-.article .lead { font-size:1.25rem; color:#57544e; max-width:700px; } .article-body { margin-top:50px; padding-top:35px; border-top:3px solid var(--emerald); font-family:Georgia,serif; font-size:1.15rem; }
+.article .lead { font-size:1.25rem; color:#57544e; max-width:700px; }
+.article-intro { margin-top:50px; padding-top:35px; border-top:3px solid var(--emerald); font-family:Georgia,serif; font-size:1.15rem; }
+.article-body { margin-top:0; padding-top:0; border-top:0; font-family:Georgia,serif; font-size:1.15rem; }
 .article-body h2 { font:normal 2rem Georgia,serif; margin-top:45px; } .article-body p { margin:0 0 24px; } .article-body blockquote { border-left:3px solid var(--orange); padding-left:20px; margin:38px 0; font-style:italic; } .article-image { margin:38px 0; } .article-image img { display:block; width:100%; height:auto; } .article-image figcaption { margin-top:10px; color:var(--muted); font-family:"Trebuchet MS",sans-serif; font-size:.8rem; }
 .article-links { display:flex; justify-content:space-between; gap:50px; margin-top:80px; padding-top:10px; font-family:Georgia,serif; } .article-links > div { display:flex; flex-direction:column; align-items:flex-start; gap:7px; } .article-links a { font-size:1.1rem; }
 .article-links .eyebrow { margin:0 0 8px; } .resource-file-note { margin-top:45px; padding:24px 0; border-top:1px solid var(--soft); border-bottom:1px solid var(--soft); } .resource-file-note .meta { color:var(--emerald); }
