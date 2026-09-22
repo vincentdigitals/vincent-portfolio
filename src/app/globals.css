@@ -96,9 +96,10 @@ main { width:100%; }
   .about-profile h1 { font-size:clamp(2.7rem,14vw,4rem); }
   .about-socials { gap:14px 18px; }
   .blog-intro { padding-top:52px; padding-bottom:34px; }
-  .article-layout { display:flex; flex-direction:column; gap:0; padding:0 6vw; }
-  .article-toc-column { width:100%; padding-top:0; order:0; }
-  .article-toc { position:static; margin:34px 0 0; }
+  .article-layout { display:block; padding:0 6vw; }
+  .article-toc-column-desktop { display:none; }
+  .article-toc-mobile { display:block; margin:34px 0 46px; }
+  .article-toc-mobile .article-toc { position:static; margin:0; }
   .article-toc-details { border:1px solid var(--soft); background:rgba(226,240,217,.35); }
   .article-toc-details > summary { padding:12px 14px; margin:0; font-size:.62rem; cursor:pointer; }
   .article-toc-details ol { padding:8px 14px 12px; }
@@ -186,6 +187,8 @@ main { width:100%; }
 .article-layout { width:100%; max-width:1280px; margin:0 auto; padding:0 5vw; display:grid; grid-template-columns:minmax(220px,240px) minmax(0,760px) minmax(40px,1fr); gap:42px; align-items:start; }
 .article { max-width:760px; margin:75px 0; padding:0; min-width:0; }
 .article-toc-column { min-width:0; padding-top:118px; }
+.article-toc-column-desktop { display:block; }
+.article-toc-mobile { display:none; }
 .article-toc { position:sticky; top:108px; margin:0; padding:0; background:transparent; border:0; }
 .article-toc-details > summary { list-style:none; cursor:default; color:var(--emerald); font-family:"Courier New",monospace; text-transform:uppercase; letter-spacing:.08em; font-size:.66rem; margin:0 0 14px; }
 .article-toc-details > summary::-webkit-details-marker { display:none; }
