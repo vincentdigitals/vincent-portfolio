@@ -139,26 +139,52 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
             <p className="lead">{post.excerpt}</p>
 
-            <div className="article-toc-mobile">
-              {"bodyBlocks" in post && post.bodyBlocks?.length ? (() => {
-                const tableOfContents = buildTableOfContents(post.bodyBlocks as HeadingBlock[]);
-                return tableOfContents.length ? <ArticleTableOfContents items={tableOfContents} /> : null;
-              })() : null}
-            </div>
+            {"bodyBlocks" in post && post.bodyBlocks?.length ? (() => {
+              const blocks = post.bodyBlocks as HeadingBlock[];
+              const firstH2Index = blocks.findIndex((block) => block.style === "h2");
+              const introBlocks = firstH2Index === -1 ? blocks : blocks.slice(0, firstH2Index);
+              const remainingBlocks = firstH2Index === -1 ? [] : blocks.slice(firstH2Index);
+              const tableOfContents = buildTableOfContents(blocks);
 
-            <div className="article-body">
-            {"bodyBlocks" in post && post.bodyBlocks?.length ? (
-              <PortableText value={post.bodyBlocks as never[]} components={portableTextComponents} />
-            ) : (
-              post.sections.map((section, index) => (
-                <section key={`${section.heading ?? "section"}-${index}`}>
-                  {section.heading && <h2>{section.heading}</h2>}
-                  {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-                  {section.quote && <blockquote>{section.quote}</blockquote>}
-                </section>
-              ))
+              return (
+                <>
+                  {introBlocks.length > 0 && (
+                    <div className="article-intro">
+                      <PortableText value={introBlocks as never[]} components={portableTextComponents} />
+                    </div>
+                  )}
+
+                  <div className="article-toc-mobile">
+                    {tableOfContents.length ? <ArticleTableOfContents items={tableOfContents} /> : null}
+                  </div>
+
+                  <div className="article-body">
+                    {remainingBlocks.length > 0 ? (
+                      <PortableText value={remainingBlocks as never[]} components={portableTextComponents} />
+                    ) : null}
+                  </div>
+                </>
+              );
+            })() : (
+              <>
+                <div className="article-toc-mobile">
+                  {"bodyBlocks" in post && post.bodyBlocks?.length ? (() => {
+                    const tableOfContents = buildTableOfContents(post.bodyBlocks as HeadingBlock[]);
+                    return tableOfContents.length ? <ArticleTableOfContents items={tableOfContents} /> : null;
+                  })() : null}
+                </div>
+
+                <div className="article-body">
+                  {post.sections.map((section, index) => (
+                    <section key={`${section.heading ?? "section"}-${index}`}>
+                      {section.heading && <h2>{section.heading}</h2>}
+                      {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+                      {section.quote && <blockquote>{section.quote}</blockquote>}
+                    </section>
+                  ))}
+                </div>
+              </>
             )}
-          </div>
 
           <RelatedContent relatedPosts={relatedPosts} relatedResources={relatedResources} nextPost={nextPost} />
         </article>
