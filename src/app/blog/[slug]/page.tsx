@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import ArticleTableOfContents, { type TableOfContentsItem } from "@/components/article-table-of-contents";
 import { PortableText, type PortableTextComponents } from "@portabletext/react";
 import { buildBlogPostingJsonLd, buildBreadcrumbJsonLd, JsonLd } from "@/components/structured-data";
 import { getCmsSlugs, getNextPost, getPostBySlug, getRelatedPosts, getRelatedResources, type Post, type Resource } from "@/lib/content";
@@ -47,16 +46,6 @@ function slugifyHeading(text: string) {
 
 function headingId(block: HeadingBlock, index = 0) {
   return `heading-${block._key || slugifyHeading(headingText(block)) || `section-${index + 1}`}`;
-}
-
-function buildTableOfContents(blocks: HeadingBlock[]): TableOfContentsItem[] {
-  return blocks
-    .filter((block) => block.style === "h2")
-    .map((block, index) => {
-      const text = headingText(block);
-      return { id: headingId(block, index), text, key: block._key ?? `${headingId(block, index)}-${index}` };
-    })
-    .filter((heading) => heading.text);
 }
 
 const portableTextComponents: PortableTextComponents = {
@@ -121,12 +110,6 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       <JsonLd data={breadcrumbJson} />
       <div className="page">
         <div className="article-layout">
-          <aside className="article-toc-column article-toc-column-desktop">
-            {"bodyBlocks" in post && post.bodyBlocks?.length ? (() => {
-              const tableOfContents = buildTableOfContents(post.bodyBlocks as HeadingBlock[]);
-              return tableOfContents.length ? <ArticleTableOfContents items={tableOfContents} /> : null;
-            })() : null}
-          </aside>
           <article className="article">
             <p className="eyebrow">{post.topic}</p>
             <h1>{post.title}</h1>
@@ -139,42 +122,12 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
             <p className="lead">{post.excerpt}</p>
 
-            {"bodyBlocks" in post && post.bodyBlocks?.length ? (() => {
-              const blocks = post.bodyBlocks as HeadingBlock[];
-              const firstH2Index = blocks.findIndex((block) => block.style === "h2");
-              const introBlocks = firstH2Index === -1 ? blocks : blocks.slice(0, firstH2Index);
-              const remainingBlocks = firstH2Index === -1 ? [] : blocks.slice(firstH2Index);
-              const tableOfContents = buildTableOfContents(blocks);
-
-              return (
-                <>
-                  {introBlocks.length > 0 && (
-                    <div className="article-intro">
-                      <PortableText value={introBlocks as never[]} components={portableTextComponents} />
-                    </div>
-                  )}
-
-                  <div className="article-toc-mobile">
-                    {tableOfContents.length ? <ArticleTableOfContents items={tableOfContents} /> : null}
-                  </div>
-
-                  <div className="article-body">
-                    {remainingBlocks.length > 0 ? (
-                      <PortableText value={remainingBlocks as never[]} components={portableTextComponents} />
-                    ) : null}
-                  </div>
-                </>
-              );
-            })() : (
-              <>
-                <div className="article-toc-mobile">
-                  {"bodyBlocks" in post && post.bodyBlocks?.length ? (() => {
-                    const tableOfContents = buildTableOfContents(post.bodyBlocks as HeadingBlock[]);
-                    return tableOfContents.length ? <ArticleTableOfContents items={tableOfContents} /> : null;
-                  })() : null}
-                </div>
-
-                <div className="article-body">
+            {"bodyBlocks" in post && post.bodyBlocks?.length ? (
+              <div className="article-body">
+                <PortableText value={post.bodyBlocks as never[]} components={portableTextComponents} />
+              </div>
+            ) : (
+              <div className="article-body">
                   {post.sections.map((section, index) => (
                     <section key={`${section.heading ?? "section"}-${index}`}>
                       {section.heading && <h2>{section.heading}</h2>}
@@ -182,8 +135,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
                       {section.quote && <blockquote>{section.quote}</blockquote>}
                     </section>
                   ))}
-                </div>
-              </>
+              </div>
             )}
 
           <RelatedContent relatedPosts={relatedPosts} relatedResources={relatedResources} nextPost={nextPost} />
