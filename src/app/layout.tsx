@@ -7,26 +7,28 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.omoseebivincent.site/"),
   alternates: { canonical: "https://www.omoseebivincent.site/" },
   title: {
-    default: "Omoseebi Vincent — Product, Customers & Growth",
+    default: "Omoseebi Vincent — Helping Founders Find What’s Holding Growth Back",
     template: "%s — Omoseebi Vincent"
   },
-  description: "Product discovery, customer research, validation, positioning, marketing, and growth for early-stage founders.",
+  description: "Omoseebi Vincent helps early-stage founders figure out what is getting in the way of growth across product, customers, positioning, marketing, sales, distribution, and retention.",
   keywords: [
     "early-stage founders",
+    "startup growth",
+    "growth problems",
     "customer research",
     "product discovery",
     "product validation",
     "market research",
     "product positioning",
     "startup positioning",
-    "messaging and copywriting",
     "startup marketing",
     "founder-led sales",
-    "early-stage growth"
+    "early-stage growth",
+    "customer retention"
   ],
   openGraph: {
-    title: "Omoseebi Vincent — Product, Customers & Growth",
-    description: "Product discovery, customer research, validation, positioning, marketing, and growth for early-stage founders.",
+    title: "Omoseebi Vincent — Helping Founders Find What’s Holding Growth Back",
+    description: "Omoseebi Vincent helps early-stage founders figure out what is getting in the way of growth across product, customers, positioning, marketing, sales, distribution, and retention.",
     url: "https://www.omoseebivincent.site/",
     type: "website",
     siteName: "Omoseebi Vincent"

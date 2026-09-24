@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import ArticleTableOfContents, { type TableOfContentsItem } from "@/components/article-table-of-contents";
 import { PortableText, type PortableTextComponents } from "@portabletext/react";
 import { buildBlogPostingJsonLd, buildBreadcrumbJsonLd, JsonLd } from "@/components/structured-data";
 import { getCmsSlugs, getNextPost, getPostBySlug, getRelatedPosts, getRelatedResources, type Post, type Resource } from "@/lib/content";
@@ -47,16 +46,6 @@ function slugifyHeading(text: string) {
 
 function headingId(block: HeadingBlock, index = 0) {
   return `heading-${block._key || slugifyHeading(headingText(block)) || `section-${index + 1}`}`;
-}
-
-function buildTableOfContents(blocks: HeadingBlock[]): TableOfContentsItem[] {
-  return blocks
-    .filter((block) => block.style === "h2")
-    .map((block, index) => {
-      const text = headingText(block);
-      return { id: headingId(block, index), text, key: block._key ?? `${headingId(block, index)}-${index}` };
-    })
-    .filter((heading) => heading.text);
 }
 
 const portableTextComponents: PortableTextComponents = {
@@ -121,37 +110,33 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       <JsonLd data={breadcrumbJson} />
       <div className="page">
         <div className="article-layout">
-          <aside className="article-toc-column">
-            {"bodyBlocks" in post && post.bodyBlocks?.length ? (() => {
-              const tableOfContents = buildTableOfContents(post.bodyBlocks as HeadingBlock[]);
-              return tableOfContents.length ? <ArticleTableOfContents items={tableOfContents} /> : null;
-            })() : null}
-          </aside>
-        <article className="article">
-          <p className="eyebrow">{post.topic}</p>
-          <h1>{post.title}</h1>
+          <article className="article">
+            <p className="eyebrow">{post.topic}</p>
+            <h1>{post.title}</h1>
 
-          <div className="article-meta" aria-label="Article information">
-            <span><strong>By</strong> {post.author?.name ?? "Omoseebi Vincent"}</span>
-            <span className="divider">·</span>
-            <span><strong>Published</strong> {post.publishedAt && post.date ? <time dateTime={post.publishedAt}>{post.date}</time> : "Recently published"}</span>
-          </div>
+            <div className="article-meta" aria-label="Article information">
+              <span><strong>By</strong> {post.author?.name ?? "Omoseebi Vincent"}</span>
+              <span className="divider">·</span>
+              <span><strong>Published</strong> {post.publishedAt && post.date ? <time dateTime={post.publishedAt}>{post.date}</time> : "Recently published"}</span>
+            </div>
 
-          <p className="lead">{post.excerpt}</p>
+            <p className="lead">{post.excerpt}</p>
 
-          <div className="article-body">
             {"bodyBlocks" in post && post.bodyBlocks?.length ? (
-              <PortableText value={post.bodyBlocks as never[]} components={portableTextComponents} />
+              <div className="article-body">
+                <PortableText value={post.bodyBlocks as never[]} components={portableTextComponents} />
+              </div>
             ) : (
-              post.sections.map((section, index) => (
-                <section key={`${section.heading ?? "section"}-${index}`}>
-                  {section.heading && <h2>{section.heading}</h2>}
-                  {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-                  {section.quote && <blockquote>{section.quote}</blockquote>}
-                </section>
-              ))
+              <div className="article-body">
+                  {post.sections.map((section, index) => (
+                    <section key={`${section.heading ?? "section"}-${index}`}>
+                      {section.heading && <h2>{section.heading}</h2>}
+                      {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+                      {section.quote && <blockquote>{section.quote}</blockquote>}
+                    </section>
+                  ))}
+              </div>
             )}
-          </div>
 
           <RelatedContent relatedPosts={relatedPosts} relatedResources={relatedResources} nextPost={nextPost} />
         </article>

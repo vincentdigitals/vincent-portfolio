@@ -9,19 +9,19 @@ const temporaryPost = {
 const workAreas = [
   {
     title: "Customers & Problems",
-    description: "Understand the customer, the problem, and what is actually happening before deciding what to build or change."
+    description: "Understand who the business is serving, what those customers need, and whether the problem being solved actually matters."
   },
   {
     title: "Product & Positioning",
-    description: "Work out whether the product solves a meaningful problem and whether the right people understand why it matters."
+    description: "Look at whether the product delivers value and whether the right people understand why they should choose it."
   },
   {
     title: "Marketing & Sales",
-    description: "Find better ways to reach the right people, communicate the value, and turn attention into real conversations and customers."
+    description: "Understand how the business reaches people, communicates its value, and turns interest into customers."
   },
   {
-    title: "Growth",
-    description: "Look at the whole system to find what is limiting growth now — then decide what deserves attention."
+    title: "Retention & Growth",
+    description: "Look at what happens after customers arrive and find what may be limiting growth beyond the current level."
   }
 ];
 
@@ -35,10 +35,13 @@ export default async function HomePage() {
         <p className="eyebrow">FOR EARLY-STAGE FOUNDERS</p>
         <h1>Find what&apos;s holding your growth back. Fix the right thing.</h1>
         <p className="hero-copy">
-          I help early-stage founders understand what is getting in the way of growth, decide what needs fixing, and work on it.
+          You have a product. You have some traction. But growth isn&apos;t happening the way you want. I help you figure out what&apos;s actually getting in the way and what needs to change.
         </p>
-        <p className="hero-scope">Product. Customers. Positioning. Marketing. Sales. Growth.</p>
-        <a className="arrow-link" href="mailto:hello@omoseebivincent.site">Talk about growth →</a>
+        <p className="hero-scope">Product. Customers. Positioning. Marketing. Sales. Retention.</p>
+        <div className="hero-actions">
+          <a className="arrow-link" href="mailto:hello@omoseebivincent.site">Talk about your growth problem →</a>
+          <Link className="arrow-link" href="/about">See how I work →</Link>
+        </div>
       </section>
 
       <section className="section">
@@ -49,7 +52,7 @@ export default async function HomePage() {
           </div>
           <Link className="arrow-link" href="/blog">Read the blog →</Link>
         </div>
-        <p className="section-intro">Ideas and practical thinking about the problems that sit behind product and growth.</p>
+        <p className="section-intro">Practical thinking about the problems that get in the way when a business is trying to grow.</p>
 
         {latestPosts.length > 0 ? (
           <div className="card-grid">
@@ -73,7 +76,8 @@ export default async function HomePage() {
 
       <section className="section">
         <p className="eyebrow">WHAT I WORK ON</p>
-        <h2>Find the problem. Fix what matters.</h2>
+        <h2>When growth isn&apos;t happening, the problem isn&apos;t always obvious.</h2>
+        <p className="section-intro">A growth problem can come from different parts of the business. The first job is figuring out where the problem actually is.</p>
         <div className="work-grid">
           {workAreas.map((area, index) => (
             <article className="work-item" key={area.title}>
@@ -87,21 +91,20 @@ export default async function HomePage() {
 
       <section className="section">
         <p className="eyebrow">HOW I WORK</p>
-        <h2>Understand. Diagnose. Fix. Learn.</h2>
-        <p className="workflow">UNDERSTAND → DIAGNOSE → FIX → LEARN</p>
+        <h2>Don&apos;t assume the problem. Figure it out.</h2>
         <div className="two-column-copy">
-          <p>What is actually happening? What do customers need? What assumption is behind the decision? What evidence do we have?</p>
-          <p>Then decide what deserves attention, act on it, and learn from what happens.</p>
+          <p>What are you trying to achieve? What have you tried? What are customers actually doing? Where are people dropping off? What evidence do we have?</p>
+          <p>Then identify what is most likely getting in the way, test it where possible, and focus on what deserves attention.</p>
         </div>
       </section>
 
       <section className="section about-preview">
         <div>
           <p className="eyebrow">ABOUT</p>
-          <h2>Product, customers, and growth are connected.</h2>
+          <h2>I like figuring out why things aren&apos;t working.</h2>
         </div>
         <div>
-          <p>I&apos;m Omoseebi Vincent. My work sits across product discovery, customer research, validation, positioning, marketing, sales, and product building.</p>
+          <p>I&apos;m Omoseebi Vincent. My work sits across product, customers, positioning, marketing, sales, retention, and growth — because those problems are often connected.</p>
           <Link className="arrow-link" href="/about">More about my work →</Link>
         </div>
       </section>
@@ -135,7 +138,7 @@ export default async function HomePage() {
           <p className="eyebrow">START WITH THE PROBLEM</p>
           <h2>Before doing more, make sure you know what needs fixing.</h2>
           <p>More features won&apos;t fix the wrong problem. More traffic won&apos;t fix the wrong message.</p>
-          <Link className="arrow-link" href="/about">See how I work →</Link>
+          <a className="arrow-link" href="mailto:hello@omoseebivincent.site">Talk about your growth problem →</a>
         </div>
       </section>
     </div>
