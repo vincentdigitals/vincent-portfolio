@@ -38,7 +38,10 @@ export default async function HomePage() {
           You have a product. You have some traction. But growth isn&apos;t happening the way you want. I help you figure out what&apos;s actually getting in the way and what needs to change.
         </p>
         <p className="hero-scope">Product. Customers. Positioning. Marketing. Sales. Retention.</p>
-        <Link className="arrow-link" href="/about">See how I work →</Link>
+        <div className="hero-actions">
+          <a className="arrow-link" href="mailto:hello@omoseebivincent.com">Talk about your growth problem →</a>
+          <Link className="arrow-link" href="/about">See how I work →</Link>
+        </div>
       </section>
 
       <section className="section">
@@ -135,7 +138,7 @@ export default async function HomePage() {
           <p className="eyebrow">START WITH THE PROBLEM</p>
           <h2>Before doing more, make sure you know what needs fixing.</h2>
           <p>More features won&apos;t fix the wrong problem. More traffic won&apos;t fix the wrong message.</p>
-          <Link className="arrow-link" href="/blog">Read the thinking →</Link>
+          <a className="arrow-link" href="mailto:hello@omoseebivincent.com">Talk about your growth problem →</a>
         </div>
       </section>
     </div>
