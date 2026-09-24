@@ -38,7 +38,7 @@ export default async function HomePage() {
           I help early-stage founders understand what is getting in the way of growth, decide what needs fixing, and work on it.
         </p>
         <p className="hero-scope">Product. Customers. Positioning. Marketing. Sales. Growth.</p>
-        <Link className="arrow-link" href="/about">See how I work →</Link>
+        <a className="arrow-link" href="mailto:hello@omoseebivincent.site">Talk about growth →</a>
       </section>
 
       <section className="section">

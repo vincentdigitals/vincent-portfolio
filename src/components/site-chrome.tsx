@@ -29,7 +29,7 @@ export function SiteFooter() {
         <Link href="/blog">Blog</Link>
         <Link href="/resources">Resources</Link>
         <Link href="/about">About</Link>
-        <a href="mailto:hello@omoseebivincent.com">Contact</a>
+        <a href="mailto:hello@omoseebivincent.site">omoseebivincent.site</a>
         <span>© 2026</span>
       </div>
     </footer>
