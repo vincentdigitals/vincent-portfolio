@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { PortableText, type PortableTextComponents } from "@portabletext/react";
 import { buildBlogPostingJsonLd, buildBreadcrumbJsonLd, JsonLd } from "@/components/structured-data";
+import ArticleShare from "@/components/article-share";
 import { getCmsSlugs, getNextPost, getPostBySlug, getRelatedPosts, getRelatedResources, type Post, type Resource } from "@/lib/content";
 import { SITE_ORIGIN } from "@/lib/site";
 
@@ -19,7 +20,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     description: post?.seoDescription || post?.excerpt,
     alternates: { canonical: post ? `${SITE_ORIGIN}/blog/${post.slug}` : `${SITE_ORIGIN}/blog` },
     openGraph: { url: post ? `${SITE_ORIGIN}/blog/${post.slug}` : `${SITE_ORIGIN}/blog`, title: post?.title, description: post?.seoDescription || post?.excerpt, type: "article" },
-    twitter: { card: "summary", title: post?.title, description: post?.seoDescription || post?.excerpt },
+    twitter: { card: "summary_large_image", title: post?.title, description: post?.seoDescription || post?.excerpt },
+    robots: { index: true, follow: true },
   };
 }
 
@@ -121,6 +123,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             </div>
 
             <p className="lead">{post.excerpt}</p>
+
+            <ArticleShare title={post.title} url={`${SITE_ORIGIN}/blog/${post.slug}`} />
 
             {"bodyBlocks" in post && post.bodyBlocks?.length ? (
               <div className="article-body">
