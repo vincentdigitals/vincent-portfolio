@@ -79,3 +79,7 @@ export const topicBySlugQuery = `*[_type == "topic" && slug.current == $slug][0]
 
 export const postSlugsQuery = `*[_type == "post" && defined(slug.current) && (!defined(publishedAt) || publishedAt <= now())].slug.current`;
 export const resourceSlugsQuery = `*[_type == "resource" && defined(slug.current)].slug.current`;
+
+export const postSitemapQuery = `*[_type == "post" && defined(slug.current) && (!defined(publishedAt) || publishedAt <= now())] { "slug": slug.current, "lastModified": coalesce(_updatedAt, publishedAt) }`;
+
+export const resourceSitemapQuery = `*[_type == "resource" && defined(slug.current)] { "slug": slug.current, "lastModified": _updatedAt }`;
