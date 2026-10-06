@@ -296,3 +296,12 @@ main { width:100%; }
     padding:0;
   }
 }
+
+
+.article-share { margin: 34px 0 48px; padding: 20px 0; border-top: 1px solid var(--soft); border-bottom: 1px solid var(--soft); }
+.article-share .eyebrow { margin: 0 0 12px; }
+.article-share-links { display:flex; flex-wrap:wrap; gap:10px 18px; align-items:center; font-family:"Courier New",monospace; font-size:.68rem; text-transform:uppercase; letter-spacing:.05em; color:var(--emerald); }
+.article-share-links a, .article-share-links button { appearance:none; border:0; padding:0; background:transparent; color:inherit; cursor:pointer; }
+.article-share-links a:hover, .article-share-links button:hover { color:var(--orange); }
+
+@media (max-width:700px) { .article-share { margin:28px 0 40px; } .article-share-links { gap:12px 16px; } }
