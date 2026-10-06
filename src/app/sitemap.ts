@@ -7,12 +7,32 @@ export const revalidate = 60;
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = SITE_ORIGIN;
   const staticPaths = ["", "/about", "/blog", "/resources", "/privacy"];
-  const [postEntries, resourceEntries, topics] = await Promise.all([getCmsSitemapEntries("post"), getCmsSitemapEntries("resource"), getCmsTopicTitles()]);
-  const postPaths = postEntries.map((entry) => ({ path: `/blog/${entry.slug}`, lastModified: entry.lastModified }));
-  const topicPaths = topics.map((topic) => ({ path: `/blog/topic/${getTopicSlug(topic)}` }));
-  const resourcePaths = resourceEntries.map((entry) => ({ path: `/resources/${entry.slug}`, lastModified: entry.lastModified }));
+  const [postEntries, resourceEntries, topics] = await Promise.all([
+    getCmsSitemapEntries("post"),
+    getCmsSitemapEntries("resource"),
+    getCmsTopicTitles(),
+  ]);
+
+  const postPaths = postEntries.map((entry) => ({
+    path: `/blog/${entry.slug}`,
+    lastModified: entry.lastModified,
+  }));
+
+  const topicPaths = topics.map((topic) => ({
+    path: `/blog/topic/${getTopicSlug(topic)}`,
+    lastModified: undefined as string | undefined,
+  }));
+
+  const resourcePaths = resourceEntries.map((entry) => ({
+    path: `/resources/${entry.slug}`,
+    lastModified: entry.lastModified,
+  }));
+
   return [
-    ...staticPaths.map((path) => ({ path, lastModified: undefined as string | undefined })),
+    ...staticPaths.map((path) => ({
+      path,
+      lastModified: undefined as string | undefined,
+    })),
     ...postPaths,
     ...topicPaths,
     ...resourcePaths,
