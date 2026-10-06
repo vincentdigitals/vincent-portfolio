@@ -53,7 +53,7 @@ export type Resource = {
 };
 
 import { sanityFetch, sanityConfigured } from "@/sanity/client";
-import { postBySlugQuery, postsCountQuery, postsPageQuery, postsQuery, resourceBySlugQuery, resourcesQuery, resourceSlugsQuery, postSlugsQuery, topicTitlesQuery, topicBySlugQuery } from "@/sanity/queries";
+import { postBySlugQuery, postsCountQuery, postsPageQuery, postsQuery, resourceBySlugQuery, resourcesQuery, resourceSlugsQuery, postSlugsQuery, topicTitlesQuery, topicBySlugQuery, postSitemapQuery, resourceSitemapQuery } from "@/sanity/queries";
 import { SITE_ORIGIN, normalizeSiteUrl } from "@/lib/site";
 
 type SanityAuthor = {
@@ -211,6 +211,16 @@ export async function getCmsSlugs(kind: "post" | "resource"): Promise<string[]> 
   if (!sanityConfigured) return kind === "post" ? posts.map((post) => post.slug) : resources.map((resource) => resource.slug);
   const result = await sanityFetch<string[]>(kind === "post" ? postSlugsQuery : resourceSlugsQuery);
   return result ?? (kind === "post" ? posts.map((post) => post.slug) : resources.map((resource) => resource.slug));
+}
+
+export async function getCmsSitemapEntries(kind: "post" | "resource"): Promise<Array<{ slug: string; lastModified?: string }>> {
+  if (!sanityConfigured) {
+    const items = kind === "post" ? posts : resources;
+    return items.map((item) => ({ slug: item.slug, lastModified: item.modifiedAt || (kind === "post" ? item.publishedAt : undefined) })).filter((item) => item.lastModified || item.slug);
+  }
+  const query = kind === "post" ? postSitemapQuery : resourceSitemapQuery;
+  const result = await sanityFetch<Array<{ slug: string; lastModified?: string }>>(query);
+  return result ?? [];
 }
 
 export async function getCmsTopicTitles(): Promise<string[]> {
