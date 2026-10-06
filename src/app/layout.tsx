@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "./readability.css";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
+import { SITE_ORIGIN } from "@/lib/site";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.omoseebivincent.site/"),
-  alternates: { canonical: "https://www.omoseebivincent.site/" },
+  metadataBase: new URL(`${SITE_ORIGIN}/`),
+  alternates: { canonical: `${SITE_ORIGIN}/` },
   title: {
     default: "Omoseebi Vincent — Helping Founders Find What’s Holding Growth Back",
     template: "%s — Omoseebi Vincent"
@@ -29,11 +30,12 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Omoseebi Vincent — Helping Founders Find What’s Holding Growth Back",
     description: "Omoseebi Vincent helps early-stage founders figure out what is getting in the way of growth across product, customers, positioning, marketing, sales, distribution, and retention.",
-    url: "https://www.omoseebivincent.site/",
+    url: `${SITE_ORIGIN}/`,
     type: "website",
     siteName: "Omoseebi Vincent"
   },
   twitter: { card: "summary_large_image" },
+  robots: { index: true, follow: true },
   icons: {
     icon: "/profile.jpg",
     apple: "/profile.jpg"
