@@ -1,12 +1,39 @@
 "use client";
 
 import { useState } from "react";
-import { Check, Copy, Share2 } from "lucide-react";
 
 type ArticleShareProps = {
   title: string;
   url: string;
 };
+
+function ShareIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="18" cy="5" r="2.5" />
+      <circle cx="6" cy="12" r="2.5" />
+      <circle cx="18" cy="19" r="2.5" />
+      <path d="m8.2 10.8 7.6-4.4M8.2 13.2l7.6 4.4" />
+    </svg>
+  );
+}
+
+function CopyIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="8" y="8" width="11" height="11" rx="1.5" />
+      <path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8" />
+    </svg>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="m5 12 4 4L19 6" />
+    </svg>
+  );
+}
 
 export default function ArticleShare({ title, url }: ArticleShareProps) {
   const [copied, setCopied] = useState(false);
@@ -74,7 +101,7 @@ export default function ArticleShare({ title, url }: ArticleShareProps) {
           onClick={shareAnywhere}
           title="Share this article"
         >
-          <Share2 size={16} strokeWidth={1.8} aria-hidden="true" />
+          <ShareIcon />
           <span>Share</span>
         </button>
 
@@ -84,11 +111,7 @@ export default function ArticleShare({ title, url }: ArticleShareProps) {
           onClick={copyLink}
           title={copied ? "Link copied" : "Copy article link"}
         >
-          {copied ? (
-            <Check size={16} strokeWidth={1.8} aria-hidden="true" />
-          ) : (
-            <Copy size={16} strokeWidth={1.8} aria-hidden="true" />
-          )}
+          {copied ? <CheckIcon /> : <CopyIcon />}
           <span>{copied ? "Copied" : "Copy link"}</span>
         </button>
       </div>
