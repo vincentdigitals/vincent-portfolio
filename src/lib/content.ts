@@ -215,8 +215,10 @@ export async function getCmsSlugs(kind: "post" | "resource"): Promise<string[]> 
 
 export async function getCmsSitemapEntries(kind: "post" | "resource"): Promise<Array<{ slug: string; lastModified?: string }>> {
   if (!sanityConfigured) {
-    const items = kind === "post" ? posts : resources;
-    return items.map((item) => ({ slug: item.slug, lastModified: kind === "post" ? item.modifiedAt || item.publishedAt : undefined }));
+    if (kind === "post") {
+      return posts.map((post) => ({ slug: post.slug, lastModified: post.modifiedAt || post.publishedAt }));
+    }
+    return resources.map((resource) => ({ slug: resource.slug }));
   }
   const query = kind === "post" ? postSitemapQuery : resourceSitemapQuery;
   const result = await sanityFetch<Array<{ slug: string; lastModified?: string }>>(query);
