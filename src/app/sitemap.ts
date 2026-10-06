@@ -12,7 +12,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const topicPaths = topics.map((topic) => ({ path: `/blog/topic/${getTopicSlug(topic)}` }));
   const resourcePaths = resourceEntries.map((entry) => ({ path: `/resources/${entry.slug}`, lastModified: entry.lastModified }));
   return [
-    ...staticPaths.map((path) => ({ path })),
+    ...staticPaths.map((path) => ({ path, lastModified: undefined as string | undefined })),
     ...postPaths,
     ...topicPaths,
     ...resourcePaths,
